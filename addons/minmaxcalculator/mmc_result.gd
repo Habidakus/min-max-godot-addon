@@ -9,5 +9,10 @@ static func create(a : MMCAction, s : MMCScore) -> MMCResult:
 	ret_val.score = s
 	return ret_val
 
+static func create_score_only(s : MMCScore) -> MMCResult:
+	var ret_val : MMCResult = MMCResult.new()
+	ret_val.score = s
+	return ret_val
+
 func reverse_score() -> void:
 	score = score.reversed()

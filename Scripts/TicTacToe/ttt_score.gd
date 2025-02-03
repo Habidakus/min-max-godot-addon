@@ -7,24 +7,16 @@ var number_of_their_unblocked_two_in_a_line : int = 0
 var number_of_our_unblocked_solos : int = 0
 var number_of_their_unblocked_solos : int = 0
 
-static func create(action : TTTAction) -> TTTScore:
+static func create(game_state : TTTGameState) -> TTTScore:
+	
+	# Our score is rated for who just went, not who's turn it is right now
+	
 	var ret_val : TTTScore = TTTScore.new()
 	for i in range(0, 3):
-		ret_val.update(action.xs_turn, action.squares[0 + i * 3], action.squares[1 + i * 3], action.squares[2 + i * 3])
-		ret_val.update(action.xs_turn, action.squares[0 + i], action.squares[3 + i], action.squares[6 + i])
-	ret_val.update(action.xs_turn, action.squares[0], action.squares[4], action.squares[8])
-	ret_val.update(action.xs_turn, action.squares[2], action.squares[4], action.squares[6])
-	return ret_val
-
-func _to_string() -> String:
-	var ret_val : String = ""
-	if is_victory:
-		ret_val += "victory"
-	elif is_loss:
-		ret_val += "loss"
-	if !ret_val.is_empty():
-		ret_val += " "
-	ret_val += str(number_of_our_unblocked_two_in_a_line) + "/" + str(number_of_our_unblocked_solos) + "//" + str(number_of_their_unblocked_solos) + "/" + str(number_of_their_unblocked_two_in_a_line)
+		ret_val.update(!game_state.xs_turn, game_state.squares[0 + i * 3], game_state.squares[1 + i * 3], game_state.squares[2 + i * 3])
+		ret_val.update(!game_state.xs_turn, game_state.squares[0 + i], game_state.squares[3 + i], game_state.squares[6 + i])
+	ret_val.update(!game_state.xs_turn, game_state.squares[0], game_state.squares[4], game_state.squares[8])
+	ret_val.update(!game_state.xs_turn, game_state.squares[2], game_state.squares[4], game_state.squares[6])
 	return ret_val
 
 func update(xs_turn : bool, v1 : int, v2 : int, v3 : int) -> void:
@@ -43,9 +35,11 @@ func update(xs_turn : bool, v1 : int, v2 : int, v3 : int) -> void:
 	elif v3 == -1:
 		os += 1
 	if xs == 3:
-		is_victory = xs_turn
+		is_victory = is_victory or xs_turn
+		is_loss = is_loss or !xs_turn
 	elif os == 3:
-		is_loss = !xs_turn
+		is_victory = is_victory or !xs_turn
+		is_loss = is_loss or xs_turn
 	elif xs_turn:
 		if xs == 0:
 			if os == 1:
@@ -69,6 +63,17 @@ func update(xs_turn : bool, v1 : int, v2 : int, v3 : int) -> void:
 			elif xs == 2:
 				number_of_their_unblocked_two_in_a_line += 1
 
+func _to_string() -> String:
+	var ret_val : String = ""
+	if is_victory:
+		ret_val += "victory"
+	elif is_loss:
+		ret_val += "loss"
+	if !ret_val.is_empty():
+		ret_val += " "
+	ret_val += str(number_of_our_unblocked_two_in_a_line) + "/" + str(number_of_our_unblocked_solos) + "//" + str(number_of_their_unblocked_solos) + "/" + str(number_of_their_unblocked_two_in_a_line)
+	return ret_val
+	
 func reversed() -> MMCScore:
 	var ret_val : TTTScore = TTTScore.new()
 	ret_val.is_victory = is_loss
@@ -85,13 +90,13 @@ func is_better_than(other : MMCScore) -> bool:
 		return is_victory
 	if is_loss != other_ttt.is_loss:
 		return other_ttt.is_loss
-	if number_of_their_unblocked_two_in_a_line != other_ttt.number_of_their_unblocked_two_in_a_line:
-		return other_ttt.number_of_their_unblocked_two_in_a_line > number_of_their_unblocked_two_in_a_line
-	if number_of_our_unblocked_two_in_a_line != other_ttt.number_of_our_unblocked_two_in_a_line:
-		return number_of_our_unblocked_two_in_a_line > other_ttt.number_of_our_unblocked_two_in_a_line
-	if number_of_their_unblocked_solos != other_ttt.number_of_their_unblocked_solos:
-		return other_ttt.number_of_their_unblocked_solos > number_of_their_unblocked_solos
-	if number_of_our_unblocked_solos != other_ttt.number_of_our_unblocked_solos:
-		return number_of_our_unblocked_solos > other_ttt.number_of_our_unblocked_solos
+	#if number_of_their_unblocked_two_in_a_line != other_ttt.number_of_their_unblocked_two_in_a_line:
+		#return other_ttt.number_of_their_unblocked_two_in_a_line > number_of_their_unblocked_two_in_a_line
+	#if number_of_our_unblocked_two_in_a_line != other_ttt.number_of_our_unblocked_two_in_a_line:
+		#return number_of_our_unblocked_two_in_a_line > other_ttt.number_of_our_unblocked_two_in_a_line
+	#if number_of_their_unblocked_solos != other_ttt.number_of_their_unblocked_solos:
+		#return other_ttt.number_of_their_unblocked_solos > number_of_their_unblocked_solos
+	#if number_of_our_unblocked_solos != other_ttt.number_of_our_unblocked_solos:
+		#return number_of_our_unblocked_solos > other_ttt.number_of_our_unblocked_solos
 	
 	return false
