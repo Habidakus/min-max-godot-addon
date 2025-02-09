@@ -1,4 +1,4 @@
-extends StateMachineState
+class_name StateMachineState_PressAnyKey extends StateMachineState
 
 @export var next_state : StateMachineState
 @export var time_out_in_seconds : float = -1
@@ -26,6 +26,9 @@ func handle_event(event : InputEvent) -> void:
 	# We process on "released" instead of pressed because otherwise immediately
 	# switching screens could still have the mouse being pressed on some other
 	# screen's button.
+	if process_mode == ProcessMode.PROCESS_MODE_DISABLED:
+		return
+		
 	if leave_tween == null:
 		if event.is_released():
 			if event is InputEventKey:
@@ -45,18 +48,12 @@ func exit_state(next_state: StateMachineState, callback : Callable) -> void:
 	self.modulate = Color(Color.WHITE, 1)
 	var destination_color : Color = Color(Color.WHITE, 0)
 	leave_tween.tween_property(self, "modulate", destination_color, fade_time)
-	#for child in get_children():
-		#if child is CanvasLayer:
-			#child.scale = Vector2(1, 1)
-			#leave_tween.parallel()
-			#leave_tween.tween_property(child, "scale", Vector2(0.01, 0.01), fade_time)
 	var when_finished_callback : Callable = Callable(self, "on_leave_tween_finished")
-	when_finished_callback.bind(callback)
-	leave_tween.tween_callback(when_finished_callback)
+	leave_tween.tween_callback(when_finished_callback.bind(next_state, callback))
 
-func on_leave_tween_finished(finish_callback : Callable) -> void:
+func on_leave_tween_finished(next_state: StateMachineState, finish_callback : Callable) -> void:
+	super.exit_state(next_state, finish_callback)
 	leave_tween = null
-	finish_callback.call()
 
 func enter_state() -> void:
 	countdown = 0
@@ -67,9 +64,4 @@ func enter_state() -> void:
 		var tween : Tween = get_tree().create_tween()
 		var destination_color : Color = Color(Color.WHITE, 1)
 		tween.tween_property(self, "modulate", destination_color, fade_time)
-		#for child in get_children():
-			#if child is CanvasLayer:
-				#child.scale = Vector2(0.01, 0.01)
-				#tween.parallel()
-				#tween.tween_property(child, "scale", Vector2(1,1), fade_time)
 	

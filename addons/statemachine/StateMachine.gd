@@ -14,8 +14,8 @@ func _ready() -> void:
 	switch_state_internal(initial_state)
 
 func register_state(state: StateMachineState) -> void:
-	all_states.append(state);
-	state.init_state(self);
+	all_states.append(state)
+	state.init_state(self)
 
 func begin_state(state: StateMachineState) -> void:
 	current_state = state
@@ -23,20 +23,18 @@ func begin_state(state: StateMachineState) -> void:
 		state.enter_state()
 
 func switch_state_internal(state: StateMachineState) -> void:
+	if current_state == state:
+		print("Already in state " + state.name + ", aborting state switch")
+		return
 	if current_state != null:
 		var callback : Callable = Callable(self, "begin_state")
-		callback.bind(state)
-		current_state.exit_state(state, callback)
+		current_state.exit_state(state, callback.bind(state))
 	else:
 		begin_state(state)
 
 func switch_state(next_state_name: String) -> void:
 	for state : StateMachineState in all_states:
 		if state.name == next_state_name:
-			if current_state == state:
-				print("Already in state " + next_state_name + ", aborting state switch")
-				return
-
 			switch_state_internal(state)
 			return
 	assert(false, "{0} is not a valid state".format([next_state_name]))
