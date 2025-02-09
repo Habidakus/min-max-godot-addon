@@ -38,6 +38,15 @@ func apply_action(action : MMCAction) -> MMCGameState:
 	ret_val.xs_turn = !xs_turn
 	return ret_val
 
+func is_ended() -> bool:
+	var score : TTTScore = TTTScore.create(self)
+	if score.is_loss || score.is_victory:
+		return true
+	for i in squares.size():
+		if squares[i] == 0:
+			return false
+	return true
+
 func get_moves() -> Array[MMCAction]:
 	var ret_val : Array[MMCAction]
 	var current_score : TTTScore = TTTScore.create(self)
