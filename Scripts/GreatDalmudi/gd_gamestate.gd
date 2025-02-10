@@ -1,7 +1,5 @@
 class_name GDGameState extends MMCGameState
 
-const max_rank : int = 9
-
 var player_1_turn : bool = true
 var player_1_last_played_a_card : bool = false
 var player_1_hand : Array[int]
@@ -9,7 +7,7 @@ var player_2_hand : Array[int]
 var current_rank : int = -1
 var current_count : int = -1
 
-static func create_initial_state(s : int) -> GDGameState:
+static func create_initial_state(s : int, max_rank : int) -> GDGameState:
 	var rnd : RandomNumberGenerator = RandomNumberGenerator.new()
 	rnd.seed = s
 	var deck : Array
