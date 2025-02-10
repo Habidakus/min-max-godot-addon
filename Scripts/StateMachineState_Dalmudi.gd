@@ -13,7 +13,9 @@ var player_who_last_played : int = 0
 var current_rank : int = -1
 var current_count : int = -1
 
+const max_rank : int = 4
 const side_border : int = 48
+const initial_seed : int = 1
 
 var card_scene : Resource = preload("res://Scenes/card.tscn")
 
@@ -29,7 +31,7 @@ func init() -> void:
 	assert(continue_label)
 	continue_label.hide()
 	cards.clear()
-	for rank in range(1, 8):
+	for rank in range(1, max_rank + 1):
 		for c in range(1, rank+1):
 			var card : Card = card_scene.instantiate()
 			card.set_rank(rank)
@@ -187,7 +189,10 @@ func gui_input(event: InputEvent, mouse_card : Card) -> void:
 	game_state = get_current_game_state()
 	game_state.player_1_turn = true
 	if !game_state.get_moves().is_empty():
-		pending_ai_move = calc.get_best_action(game_state)
+		var debug : MMCDebug = MMCDebug.new()
+		pending_ai_move = calc.get_best_action(game_state, 4, debug)
+		debug.dump(game_state)
+		pass
 
 func _process(_delta: float) -> void:
 	cards_moving = false
@@ -229,7 +234,10 @@ func enter_state() -> void:
 	ended = false
 	pending_ai_move = null
 	var rnd : RandomNumberGenerator = RandomNumberGenerator.new()
-	rnd.seed = int(Time.get_unix_time_from_system())
+	if initial_seed == -1:
+		rnd.seed = int(Time.get_unix_time_from_system())
+	else:
+		rnd.seed = initial_seed
 	for card : Card in cards:
 		var color_rect : ColorRect = card.get_child(0) as ColorRect
 		color_rect.color = Color.BLACK
