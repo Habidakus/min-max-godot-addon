@@ -4,16 +4,18 @@ class_name MinMaxCalculator extends Object
 
 const max_int : int = 9223372036854775807
 
-func get_best_action(game_state : MMCGameState, depth : int = max_int) -> MMCAction:
-	var result : MMCResult = get_best_action_internal(game_state, MMCScore.LOWEST, MMCScore.HIGHEST, depth)
+func get_best_action(game_state : MMCGameState, depth : int = max_int, debug : MMCDebug = null) -> MMCAction:
+	var result : MMCResult = get_best_action_internal(game_state, MMCScore.LOWEST, MMCScore.HIGHEST, depth, debug)
 	if result == null:
 		return null
 	else:
 		return result.action
 
-func get_best_action_internal(game_state : MMCGameState, actorsLowerBound: MMCScore, actorsUpperBound: MMCScore, depth : int) -> MMCResult:
+func get_best_action_internal(game_state : MMCGameState, actorsLowerBound: MMCScore, actorsUpperBound: MMCScore, depth : int, debug : MMCDebug) -> MMCResult:
 	var actions : Array[MMCAction] = game_state.get_moves()
-	if actions.is_empty():
+	if debug != null:
+		debug.add_actions(game_state, actions)
+	if actions.is_empty() || depth == 0:
 		# Action is a terminal (leaf) action, so there are no counters to it
 		return MMCResult.create_score_only(game_state.get_score_for_current_player())
 	
@@ -31,8 +33,10 @@ func get_best_action_internal(game_state : MMCGameState, actorsLowerBound: MMCSc
 		var post_action_state : MMCGameState = game_state.apply_action(action)
 		var actorsUpperBoundReversed : MMCScore = actorsUpperBound.reversed()
 		var actorsLowerBoundReversed : MMCScore = actorsLowerBound.reversed()
-		var result : MMCResult = get_best_action_internal(post_action_state, actorsUpperBoundReversed, actorsLowerBoundReversed, depth - 1)
+		var result : MMCResult = get_best_action_internal(post_action_state, actorsUpperBoundReversed, actorsLowerBoundReversed, depth - 1, debug)
 		var result_score : MMCScore = result.score.reversed()
+		if debug != null:
+			debug.add_result(game_state, action, post_action_state, result_score)
 		if best == null:
 			best = MMCResult.create(action, result_score)
 		elif result_score.is_better_than(best.score):

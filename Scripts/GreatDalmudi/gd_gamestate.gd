@@ -23,8 +23,8 @@ static func create_initial_state(s : int, max_rank : int) -> GDGameState:
 			ret_val.player_2_hand.append(deck[i][0])
 	return ret_val
 
-func dump() -> void:
-	print(dump_current() + " : " + dump_hand(player_1_hand, !player_1_turn) + " / "+ dump_hand(player_2_hand, player_1_turn))
+func _to_string() -> String:
+	return dump_current() + " : " + dump_hand(player_1_hand, !player_1_turn) + " / "+ dump_hand(player_2_hand, player_1_turn)
 
 func dump_current() -> String:
 	if current_rank == -1:

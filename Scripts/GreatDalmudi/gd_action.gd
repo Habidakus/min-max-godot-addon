@@ -7,7 +7,10 @@ func get_score() -> MMCScore:
 	return score
 
 func _to_string() -> String:
-	return "rank=" + str(rank) + ", score=" + str(score)
+	if rank <= 0:
+		return "no valid moves, score = " + str(score)
+	else:
+		return "discard " + str(rank) + "s, score=" + str(score)
 
 #static func start(hand1 : Array[int], hand2 : Array[int]) -> GDAction:
 	#var ret_val : GDAction = GDAction.new()

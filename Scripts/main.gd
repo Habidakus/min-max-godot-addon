@@ -5,7 +5,7 @@ var completed : bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var game_state : GDGameState = GDGameState.create_initial_state(132)
+	var game_state : GDGameState = GDGameState.create_initial_state(132, 8)
 	#var game_state : TTTGameState = TTTGameState.create_initial_state()
 	var action : MMCAction = calc.get_best_action(game_state)
 	while action != null:
