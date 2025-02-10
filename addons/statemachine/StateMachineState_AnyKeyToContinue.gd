@@ -36,9 +36,9 @@ func handle_event(event : InputEvent) -> void:
 			if event is InputEventMouseButton:
 				our_state_machine.switch_state_internal(next_state)
 
-func exit_state(next_state: StateMachineState, callback : Callable) -> void:
+func exit_state(next_state: StateMachineState) -> void:
 	if !fade_out:
-		super.exit_state(next_state, callback)
+		super.exit_state(next_state)
 		return
 	
 	if leave_tween != null && leave_tween.is_running():
@@ -49,16 +49,16 @@ func exit_state(next_state: StateMachineState, callback : Callable) -> void:
 	var destination_color : Color = Color(Color.WHITE, 0)
 	leave_tween.tween_property(self, "modulate", destination_color, fade_time)
 	var when_finished_callback : Callable = Callable(self, "on_leave_tween_finished")
-	leave_tween.tween_callback(when_finished_callback.bind(next_state, callback))
+	leave_tween.tween_callback(when_finished_callback.bind(next_state))
 
-func on_leave_tween_finished(next_state: StateMachineState, finish_callback : Callable) -> void:
-	super.exit_state(next_state, finish_callback)
+func on_leave_tween_finished(next_state: StateMachineState) -> void:
+	super.exit_state(next_state)
 	leave_tween = null
 
 func enter_state() -> void:
+	super.enter_state()
 	countdown = 0
 	leave_tween = null
-	super.enter_state()
 	if fade_in:
 		self.modulate = Color(Color.WHITE, 0)
 		var tween : Tween = get_tree().create_tween()

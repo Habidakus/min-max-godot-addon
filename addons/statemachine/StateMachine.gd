@@ -28,7 +28,8 @@ func switch_state_internal(state: StateMachineState) -> void:
 		return
 	if current_state != null:
 		var callback : Callable = Callable(self, "begin_state")
-		current_state.exit_state(state, callback.bind(state))
+		current_state.set_completion_call(callback.bind(state))
+		current_state.exit_state(state)
 	else:
 		begin_state(state)
 
