@@ -387,6 +387,22 @@ layout_mode = 2
 size_flags_vertical = 3
 color = Color(4.76494e-06, 0.526513, 0.0255639, 1)
 
+[node name="PassButton" type="Button" parent="StateMachine/State_Dalmudi/ColorRect"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -89.0
+offset_top = -60.0
+offset_right = 90.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "No Valid Moves - PASS"
+
 [node name="Continue" type="Label" parent="StateMachine/State_Dalmudi"]
 layout_mode = 1
 anchors_preset = 7
@@ -404,3 +420,4 @@ text = "(Press any key to continue)"
 [connection signal="button_up" from="StateMachine/State_Menu/VBoxContainer/TicTacToe" to="StateMachine/State_Menu" method="_on_tic_tac_toe_button_up"]
 [connection signal="button_up" from="StateMachine/State_Menu/VBoxContainer/Dalmudi" to="StateMachine/State_Menu" method="_on_dalmudi_button_up"]
 [connection signal="button_up" from="StateMachine/State_Menu/VBoxContainer/Checkers" to="StateMachine/State_Menu" method="_on_checkers_button_up"]
+[connection signal="button_up" from="StateMachine/State_Dalmudi/ColorRect/PassButton" to="StateMachine/State_Dalmudi" method="_on_pass_turn_button_up"]

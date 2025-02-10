@@ -71,6 +71,13 @@ func apply_action(action : MMCAction) -> MMCGameState:
 	ret_val.player_1_turn = !player_1_turn
 	return ret_val
 
+func must_pass(moves : Array[MMCAction]) -> bool:
+	if moves.is_empty():
+		return true
+	if moves.size() == 1:
+		return (moves[0] as GDAction).rank <= 0
+	return false
+
 func get_moves() -> Array[MMCAction]:
 	if player_1_hand.is_empty() or player_2_hand.is_empty():
 		return []

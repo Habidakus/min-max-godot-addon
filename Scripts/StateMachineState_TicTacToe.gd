@@ -69,9 +69,10 @@ func run_ai() -> void:
 		continue_label.show()
 
 func _input(event : InputEvent) -> void:
-	if event is InputEventKey:
-		if event.is_released():
-			our_state_machine.switch_state("State_Menu")
+	if ended:
+		if event is InputEventKey:
+			if event.is_released():
+				our_state_machine.switch_state("State_Menu")
 	
 func gui_input(event: InputEvent, color_rect : ColorRect) -> void:
 	if ended:

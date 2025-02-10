@@ -3,6 +3,7 @@ extends StateMachineState
 var hand_ai : ColorRect
 var hand_player : ColorRect
 var discard_area : ColorRect
+var pass_button : Button
 var continue_label : Label
 var cards : Array[Card]
 var ended : bool = false
@@ -28,6 +29,7 @@ func init() -> void:
 	hand_player = find_child("Hand_Player") as ColorRect
 	discard_area = find_child("Discard_Area") as ColorRect
 	continue_label = find_child("Continue") as Label
+	pass_button = find_child("PassButton") as Button
 	assert(continue_label)
 	continue_label.hide()
 	cards.clear()
@@ -99,15 +101,12 @@ func move_ai_cards() -> void:
 		if iter_card.matches_rank_and_player(move.rank, 1):
 			new_count += 1
 
-	for card : Card in cards:
-		if card.player == 0:
-			card.hide()
-			card.set_pending_pos(Vector2(-100, -100))
-			print("Hiding discard " + str(card))
+	hide_discards()
 
+	pending_ai_move = null
 	current_count = new_count
 	current_rank = move.rank
-	player_who_last_played = 2
+	player_who_last_played = 1
 
 	var index : int = 0
 	for iter_card : Card in cards:
@@ -125,11 +124,33 @@ func move_ai_cards() -> void:
 	
 	var game_state : GDGameState = get_current_game_state()
 	game_state.player_1_turn = false
-	if game_state.get_moves().is_empty():
-		game_state.player_1_turn = true
-		pending_ai_move = calc.get_best_action(game_state)
-	else:
-		pending_ai_move = null
+	var moves : Array[MMCAction] = game_state.get_moves()
+	if moves.is_empty():
+		show_game_over()
+	elif game_state.must_pass(moves):
+		show_player_pass_button()
+		#game_state.player_1_turn = true
+		#pending_ai_move = calc.get_best_action(game_state)
+	#else:
+		#pending_ai_move = null
+
+func _input(event : InputEvent) -> void:
+	if ended:
+		if event is InputEventKey:
+			if event.is_released():
+				our_state_machine.switch_state("State_Menu")
+
+func show_game_over() -> void:
+	pass_button.hide()
+	continue_label.show()
+	ended = true
+
+func hide_discards() -> void:
+	for card : Card in cards:
+		if card.player == 0 && card.visible == true:
+			card.hide()
+			card.set_pending_pos(Vector2(-100, -100))
+			print("Hiding discard " + str(card))
 
 func gui_input(event: InputEvent, mouse_card : Card) -> void:
 	if ended or cards_moving:
@@ -162,11 +183,7 @@ func gui_input(event: InputEvent, mouse_card : Card) -> void:
 		if iter_card.matches_card(mouse_card):
 			new_count += 1
 
-	for card : Card in cards:
-		if card.player == 0:
-			card.hide()
-			card.set_pending_pos(Vector2(-100, -100))
-			print("Hiding discard " + str(card))
+	hide_discards()
 
 	current_count = new_count
 	current_rank = mouse_card.rank
@@ -188,11 +205,11 @@ func gui_input(event: InputEvent, mouse_card : Card) -> void:
 	
 	game_state = get_current_game_state()
 	game_state.player_1_turn = true
-	if !game_state.get_moves().is_empty():
-		var debug : MMCDebug = MMCDebug.new()
-		pending_ai_move = calc.get_best_action(game_state, 4, debug)
-		debug.dump(game_state)
-		pass
+	var moves : Array[MMCAction] = game_state.get_moves()
+	if moves.is_empty():
+		show_game_over()
+	else:
+		pending_ai_move = calc.get_best_action(game_state)
 
 func _process(_delta: float) -> void:
 	cards_moving = false
@@ -231,7 +248,10 @@ func place_cards_hand(hand : int) -> void:
 
 func enter_state() -> void:
 	super.enter_state()
+	pass_button.hide()
+	continue_label.hide()
 	ended = false
+	player_who_last_played = 0
 	pending_ai_move = null
 	var rnd : RandomNumberGenerator = RandomNumberGenerator.new()
 	if initial_seed == -1:
@@ -250,3 +270,15 @@ func enter_state() -> void:
 		card.global_position = size / 2
 		card.show()
 	cards.sort_custom(func(a, b) : return a.rank < b.rank)
+
+func show_player_pass_button() -> void:
+	pass_button.show()
+
+func _on_pass_turn_button_up() -> void:
+	var game_state : GDGameState = get_current_game_state()
+	game_state.player_1_turn = true
+	var moves : Array[MMCAction] = game_state.get_moves()
+	if moves.is_empty():
+		show_game_over()
+	else:
+		pending_ai_move = calc.get_best_action(game_state)
