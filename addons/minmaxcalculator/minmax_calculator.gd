@@ -34,6 +34,7 @@ func get_best_action_internal(game_state : MMCGameState, actorsLowerBound: MMCSc
 		var actorsUpperBoundReversed : MMCScore = actorsUpperBound.reversed()
 		var actorsLowerBoundReversed : MMCScore = actorsLowerBound.reversed()
 		var result : MMCResult = get_best_action_internal(post_action_state, actorsUpperBoundReversed, actorsLowerBoundReversed, depth - 1, debug)
+		# TODO: Why are we reversing things here, it just makes the MMCAction.get_score() wierd as it has to compute backwards as well
 		var result_score : MMCScore = result.score.reversed()
 		if debug != null:
 			debug.add_result(game_state, action, post_action_state, result_score)
