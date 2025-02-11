@@ -17,14 +17,14 @@ static func create(game_state : CGameState) -> CScore:
 		if checker.alive:
 			board_values[checker.square] = checker.side
 			if checker.move_dir == 0:
-				var our_piece : bool = (checker.side == 2) != game_state.human_turn
+				var our_piece : bool = (checker.side == 2) == game_state.human_turn
 				if our_piece:
 					ret_val.king_dominance += 1
 				else:
 					ret_val.king_dominance -= 1
 	for checker : Checker in game_state.pieces:
 		if checker.alive:
-			var our_piece : bool = (checker.side == 2) != game_state.human_turn
+			var our_piece : bool = (checker.side == 2) == game_state.human_turn
 			if our_piece:
 				ret_val.piece_dominance += 1
 				var vul : Array[int] = how_vulnerable(checker, board_values)

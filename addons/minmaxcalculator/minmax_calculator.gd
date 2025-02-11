@@ -17,15 +17,9 @@ func get_best_action_internal(game_state : MMCGameState, actorsLowerBound: MMCSc
 		debug.add_actions(game_state, actions)
 	if actions.is_empty() || depth == 0:
 		# Action is a terminal (leaf) action, so there are no counters to it
-		return MMCResult.create_score_only(game_state.get_score_for_current_player())
+		return MMCResult.create_score_only(game_state.get_score())
 	
 	actions.sort_custom(func(a : MMCAction, b : MMCAction) : return a.get_score().is_better_than(b.get_score()))
-	
-	#print("vvv")
-	#for action in actions:
-		#var post_action_state : MMCGameState = game_state.apply_action(action)
-		#post_action_state.dump()
-	#print("^^^")
 	
 	var best : MMCResult = null
 	for i : int in range(0, actions.size()):

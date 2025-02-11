@@ -8,15 +8,12 @@ var number_of_our_unblocked_solos : int = 0
 var number_of_their_unblocked_solos : int = 0
 
 static func create(game_state : TTTGameState) -> TTTScore:
-	
-	# Our score is rated for who just went, not who's turn it is right now
-	
 	var ret_val : TTTScore = TTTScore.new()
 	for i in range(0, 3):
-		ret_val.update(!game_state.xs_turn, game_state.squares[0 + i * 3], game_state.squares[1 + i * 3], game_state.squares[2 + i * 3])
-		ret_val.update(!game_state.xs_turn, game_state.squares[0 + i], game_state.squares[3 + i], game_state.squares[6 + i])
-	ret_val.update(!game_state.xs_turn, game_state.squares[0], game_state.squares[4], game_state.squares[8])
-	ret_val.update(!game_state.xs_turn, game_state.squares[2], game_state.squares[4], game_state.squares[6])
+		ret_val.update(game_state.xs_turn, game_state.squares[0 + i * 3], game_state.squares[1 + i * 3], game_state.squares[2 + i * 3])
+		ret_val.update(game_state.xs_turn, game_state.squares[0 + i], game_state.squares[3 + i], game_state.squares[6 + i])
+	ret_val.update(game_state.xs_turn, game_state.squares[0], game_state.squares[4], game_state.squares[8])
+	ret_val.update(game_state.xs_turn, game_state.squares[2], game_state.squares[4], game_state.squares[6])
 	return ret_val
 
 func update(xs_turn : bool, v1 : int, v2 : int, v3 : int) -> void:

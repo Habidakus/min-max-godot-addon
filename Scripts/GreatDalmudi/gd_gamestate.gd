@@ -123,5 +123,5 @@ func get_hand_moves(hand : Array[int], can_restart : bool) -> Array[MMCAction]:
 	
 	return ret_val
 	
-func get_score_for_current_player() -> MMCScore:
-	return GDScore.create(self).reversed()
+func get_score() -> MMCScore:
+	return GDScore.create(self)

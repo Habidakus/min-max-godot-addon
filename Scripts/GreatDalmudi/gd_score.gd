@@ -7,9 +7,7 @@ var their_hand_total : int = 0
 
 static func create(game_state : GDGameState) -> MMCScore:
 	var score : GDScore = GDScore.new()
-	
-	# Our score is rated for who just went, not who's turn it is right now
-	var for_player_one : bool = !game_state.player_1_turn
+	var for_player_one : bool = game_state.player_1_turn
 	
 	for card : int in game_state.player_1_hand:
 		if for_player_one:

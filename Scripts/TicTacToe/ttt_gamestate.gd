@@ -60,5 +60,5 @@ func get_moves() -> Array[MMCAction]:
 			ret_val.append(move)
 	return ret_val
 
-func get_score_for_current_player() -> MMCScore:
-	return TTTScore.create(self).reversed()
+func get_score() -> MMCScore:
+	return TTTScore.create(self)

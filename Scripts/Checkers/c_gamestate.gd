@@ -80,5 +80,5 @@ func get_moves() -> Array[MMCAction]:
 				ret_val.append_array(get_moves_in_direction(checker, Vector2i(1, 1)))
 	return ret_val
 
-func get_score_for_current_player() -> MMCScore:
-	return CScore.create(self).reversed()
+func get_score() -> MMCScore:
+	return CScore.create(self)

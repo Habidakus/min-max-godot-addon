@@ -14,7 +14,7 @@ var player_who_last_played : int = 0
 var current_rank : int = -1
 var current_count : int = -1
 
-const max_rank : int = 4
+const max_rank : int = 7
 const side_border : int = 48
 const initial_seed : int = 1
 

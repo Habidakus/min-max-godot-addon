@@ -9,6 +9,6 @@ func get_moves() -> Array[MMCAction]:
 	assert(false, "The derived MMCGameState class must implement get_moves()")
 	return []
 
-func get_score_for_current_player() -> MMCScore:
+func get_score() -> MMCScore:
 	assert(false, "The derived MMCGameState class must implement get_score()")
 	return null
