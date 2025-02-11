@@ -6,7 +6,7 @@ var move_dir : int = 0
 var side : int = 0
 var poly : Polygon2D
 
-const SPEED : float = 350.0
+const SPEED : float = 550.0
 
 func clone() -> Checker:
 	var ret_val : Checker = Checker.new()
@@ -38,9 +38,16 @@ func set_default_color() -> void:
 func highlight(color : Color) -> void:
 	poly.color = color
 
+func kill() -> void:
+	alive = false
+	square = Vector2i(-1, -1)
+	self.hide()
+
 func move(board : GridContainer, delta : float) -> bool:
+	if alive == false:
+		return false
+
 	var travel_dist : float = SPEED * delta
-	var still_moving : bool = false
 	for child in board.get_children():
 		if child is ColorRect:
 			var board_square : ColorRect = child as ColorRect
@@ -48,12 +55,13 @@ func move(board : GridContainer, delta : float) -> bool:
 			if board_square_loc == square:
 				var center : Vector2 = board_square.global_position + board_square.size / 2
 				if global_position == center:
-					continue
+					return false
 				var vector_to : Vector2 = center - global_position
 				var dist_squared = vector_to.length_squared()
 				if dist_squared < travel_dist * travel_dist:
 					global_position = center
-					continue
+					return false
 				global_position = global_position + vector_to.normalized() * travel_dist
-				still_moving = true
-	return still_moving
+				return true
+	assert(false)
+	return false

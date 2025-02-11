@@ -20,7 +20,7 @@ func get_move_closest_to_mouse() -> CAction:
 	var ret_val : CAction = null
 	var best_dist : float = -1
 	for move : CAction in possible_moves:
-		var last_pos : Vector2i = move.moves[move.moves.size() - 1]
+		var last_pos : Vector2i = move.get_final_location()
 		var delta : Vector2 = Vector2(last_pos.x - current_checker.square.x, last_pos.y - current_checker.square.y) * square_size
 		var move_end_global_pos = delta + current_checker.global_position
 		var dist_squared = (global_mouse_pos - move_end_global_pos).length_squared()
@@ -62,13 +62,6 @@ func enter_state() -> void:
 	super.enter_state()
 	current_checker.highlight(active_move_color)
 	game_manager.checker_released.connect(checker_released_callable)
-	
-	for move : CAction in possible_moves:
-		var p : String = str(current_checker.square) + ":"
-		for dest : Vector2i in move.moves:
-			var delta : Vector2i = Vector2i(dest.x - current_checker.square.x, dest.y - current_checker.square.y)
-			p = p + " " + str(delta)
-		print(p)
 
 func exit_state(next_state: StateMachineState) -> void:
 	game_manager.checker_released.disconnect(checker_released_callable)

@@ -63,6 +63,8 @@ func init() -> void:
 func checker_mouse_entered(square : ColorRect) -> void:
 	var square_loc : Vector2i = square.get_meta("loc") as Vector2i
 	for checker : Checker in pieces:
+		if checker.alive == false:
+			continue
 		if checker.side == 2:
 			if checker.square == square_loc:
 				checker_entered.emit(checker)
@@ -71,6 +73,8 @@ func checker_mouse_entered(square : ColorRect) -> void:
 func checker_mouse_exited(square : ColorRect) -> void:
 	var square_loc : Vector2i = square.get_meta("loc") as Vector2i
 	for checker : Checker in pieces:
+		if checker.alive == false:
+			continue
 		if checker.square == square_loc:
 			checker_exited.emit(checker)
 			return
@@ -81,6 +85,8 @@ func checker_input_event(event : InputEvent, square : ColorRect) -> void:
 		if iemb.is_pressed() || iemb.is_released():
 			var square_loc : Vector2i = square.get_meta("loc") as Vector2i
 			for checker : Checker in pieces:
+				if checker.alive == false:
+					continue
 				if checker.square == square_loc:
 					if iemb.is_pressed():
 						checker_pressed.emit(checker)
@@ -119,7 +125,22 @@ func commit_move(move : CAction) -> void:
 	if move == null || move.moves.is_empty():
 		checkers_state_machine.switch_state("State_GameOver")
 	else:
-		move.checker.square = move.moves[move.moves.size() - 1]
+		#var pre_move_score : CScore = CScore.create(generate_game_state())
+		#var pre_move_loc : Vector2i = move.checker.square
+		move.checker.square = move.get_final_location()
+		if move.foe != null:
+			move.foe.kill()
+		#if move.game_state.human_turn == false:
+			#var post_move_score : CScore = CScore.create(generate_game_state())
+			#if pre_move_score.is_better_than(post_move_score):
+				#print("AI Move made the human's position worse (" + str(pre_move_loc) + " to " + str(move.checker.square) + ")")
+				#print(str(pre_move_score) + " > " + str(post_move_score))
+			#elif post_move_score.is_better_than(pre_move_score):
+				#print("AI Move made the human's position better (" + str(pre_move_loc) + " to " + str(move.checker.square) + ")")
+				#print(str(pre_move_score) + " < " + str(post_move_score))
+			#else:
+				#print("AI move (" + str(pre_move_loc) + " to " + str(move.checker.square) + ") is neutral from the human's perspective")
+				#print(str(pre_move_score) + " == " + str(post_move_score))
 		checkers_state_machine.switch_state("State_PiecesMoving")
 
 func get_square_size() -> Vector2:
@@ -128,6 +149,8 @@ func get_square_size() -> Vector2:
 func move_pieces(delta : float) -> bool:
 	var still_moving : bool = false
 	for checker : Checker in pieces:
+		if checker.alive == false:
+			continue
 		if checker.move(board, delta):
 			still_moving = true
 	return still_moving
