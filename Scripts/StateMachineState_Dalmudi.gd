@@ -5,6 +5,7 @@ var hand_player : ColorRect
 var discard_area : ColorRect
 var pass_button : Button
 var continue_label : Label
+var game_over_label : Label
 var cards : Array[Card]
 var ended : bool = false
 var cards_moving : bool = false
@@ -16,7 +17,7 @@ var current_count : int = -1
 
 const max_rank : int = 7
 const side_border : int = 48
-const initial_seed : int = 1
+const initial_seed : int = 12
 
 var card_scene : Resource = preload("res://Scenes/card.tscn")
 
@@ -29,6 +30,9 @@ func init() -> void:
 	hand_player = find_child("Hand_Player") as ColorRect
 	discard_area = find_child("Discard_Area") as ColorRect
 	continue_label = find_child("Continue") as Label
+	game_over_label = find_child("GameOver") as Label
+	assert(game_over_label)
+	game_over_label.hide()
 	pass_button = find_child("PassButton") as Button
 	assert(continue_label)
 	continue_label.hide()
@@ -90,6 +94,7 @@ func mouse_exit(mouse_card : Card) -> void:
 
 func move_ai_cards() -> void:
 	assert(pending_ai_move != null)
+	pass_button.hide()
 	
 	var card_y_line : float = discard_area.global_position.y + discard_area.size.y / 2
 	var card_x_start : float = discard_area.global_position.x + side_border
@@ -126,9 +131,11 @@ func move_ai_cards() -> void:
 	game_state.player_1_turn = false
 	var moves : Array[MMCAction] = game_state.get_moves()
 	if moves.is_empty():
-		show_game_over()
+		var score : MMCScore = game_state.get_score()
+		var game_over_text : String = "Victory" if score.is_better_than(score.reversed()) else "Loss"
+		show_game_over(game_over_text)
 	elif game_state.must_pass(moves):
-		show_player_pass_button()
+		pass_button.show()
 
 func _input(event : InputEvent) -> void:
 	if ended:
@@ -136,8 +143,10 @@ func _input(event : InputEvent) -> void:
 			if event.is_released():
 				our_state_machine.switch_state("State_Menu")
 
-func show_game_over() -> void:
+func show_game_over(text : String) -> void:
 	pass_button.hide()
+	game_over_label.text = text
+	game_over_label.show()
 	continue_label.show()
 	ended = true
 
@@ -146,7 +155,6 @@ func hide_discards() -> void:
 		if card.player == 0 && card.visible == true:
 			card.hide()
 			card.set_pending_pos(Vector2(-100, -100))
-			print("Hiding discard " + str(card))
 
 func gui_input(event: InputEvent, mouse_card : Card) -> void:
 	if ended or cards_moving:
@@ -203,7 +211,9 @@ func gui_input(event: InputEvent, mouse_card : Card) -> void:
 	game_state.player_1_turn = true
 	var moves : Array[MMCAction] = game_state.get_moves()
 	if moves.is_empty():
-		show_game_over()
+		var score : MMCScore = game_state.get_score()
+		var game_over_text : String = "Loss" if score.is_better_than(score.reversed()) else "Victory"
+		show_game_over(game_over_text)
 	else:
 		pending_ai_move = calc.get_best_action(game_state)
 
@@ -246,7 +256,10 @@ func enter_state() -> void:
 	super.enter_state()
 	pass_button.hide()
 	continue_label.hide()
+	game_over_label.hide()
 	ended = false
+	current_count = -1
+	current_rank = -1
 	player_who_last_played = 0
 	pending_ai_move = null
 	var rnd : RandomNumberGenerator = RandomNumberGenerator.new()
@@ -267,14 +280,13 @@ func enter_state() -> void:
 		card.show()
 	cards.sort_custom(func(a, b) : return a.rank < b.rank)
 
-func show_player_pass_button() -> void:
-	pass_button.show()
-
 func _on_pass_turn_button_up() -> void:
 	var game_state : GDGameState = get_current_game_state()
 	game_state.player_1_turn = true
 	var moves : Array[MMCAction] = game_state.get_moves()
 	if moves.is_empty():
-		show_game_over()
+		var score : MMCScore = game_state.get_score()
+		var game_over_text : String = "Loss" if score.is_better_than(score.reversed()) else "Victory"
+		show_game_over(game_over_text)
 	else:
 		pending_ai_move = calc.get_best_action(game_state)
