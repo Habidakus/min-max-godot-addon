@@ -1,4 +1,7 @@
 class_name MMCResult extends Object
+## Helper class for MinMaxCalculator
+##
+## There's nothing you need to see here, unless you're just looking around
 
 var action : MMCAction = null
 var score : MMCScore = null
