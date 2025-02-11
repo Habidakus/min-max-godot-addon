@@ -129,10 +129,6 @@ func move_ai_cards() -> void:
 		show_game_over()
 	elif game_state.must_pass(moves):
 		show_player_pass_button()
-		#game_state.player_1_turn = true
-		#pending_ai_move = calc.get_best_action(game_state)
-	#else:
-		#pending_ai_move = null
 
 func _input(event : InputEvent) -> void:
 	if ended:

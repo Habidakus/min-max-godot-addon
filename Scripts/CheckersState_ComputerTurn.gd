@@ -1,15 +1,13 @@
 extends StateMachineState
 
+var game_manager : SMSCheckers
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
-
+func init(sms_checkers : SMSCheckers) -> void:
+	game_manager = sms_checkers
+	
 func enter_state() -> void:
 	super.enter_state()
 	print("COMPUTER TURN")
+	var game_state : CGameState = game_manager.generate_game_state()
+	var best_move : MMCAction = game_manager.calc.get_best_action(game_state, 5)
+	game_manager.commit_move(best_move)

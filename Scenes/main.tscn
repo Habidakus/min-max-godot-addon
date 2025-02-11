@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cldr66blmcand"]
+[gd_scene load_steps=13 format=3 uid="uid://cldr66blmcand"]
 
 [ext_resource type="Script" path="res://addons/statemachine/StateMachine.gd" id="2_nwsmv"]
 [ext_resource type="Script" path="res://Scripts/StateMachineState_MainMenu.gd" id="3_4tnxt"]
@@ -10,6 +10,12 @@
 [ext_resource type="Script" path="res://Scripts/CheckersState_HumanTurn.gd" id="8_t1pr0"]
 [ext_resource type="Script" path="res://Scripts/CheckersState_ComputerTurn.gd" id="9_igjcb"]
 [ext_resource type="Script" path="res://Scripts/Checkers_PiecesMoving.gd" id="10_rs8i3"]
+[ext_resource type="Script" path="res://Scripts/CheckersState_HumanHandOnPiece.gd" id="11_kjm2v"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_7qh42"]
+font_size = 128
+outline_size = 12
+outline_color = Color(0.0605303, 0.0605303, 0.0605303, 1)
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -506,10 +512,47 @@ anchors_preset = 0
 script = ExtResource("7_32ngo")
 
 [node name="State_GameOver" type="Control" parent="StateMachine/State_Checkers/CheckersStateMachine" node_paths=PackedStringArray("next_state")]
+visible = false
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("3_ubbcg")
 next_state = NodePath("../State_Init")
+
+[node name="Label" type="Label" parent="StateMachine/State_Checkers/CheckersStateMachine/State_GameOver"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 128
+text = "GAME OVER"
+label_settings = SubResource("LabelSettings_7qh42")
+
+[node name="Label2" type="Label" parent="StateMachine/State_Checkers/CheckersStateMachine/State_GameOver"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -104.0
+offset_top = -43.0
+offset_right = 104.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "(press any key to continue)"
 
 [node name="State_HumanTurn" type="Control" parent="StateMachine/State_Checkers/CheckersStateMachine"]
 layout_mode = 3
@@ -527,6 +570,13 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("10_rs8i3")
+
+[node name="State_HumanHandOnPiece" type="Control" parent="StateMachine/State_Checkers/CheckersStateMachine"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("11_kjm2v")
 
 [connection signal="button_up" from="StateMachine/State_Menu/VBoxContainer/TicTacToe" to="StateMachine/State_Menu" method="_on_tic_tac_toe_button_up"]
 [connection signal="button_up" from="StateMachine/State_Menu/VBoxContainer/Dalmudi" to="StateMachine/State_Menu" method="_on_dalmudi_button_up"]

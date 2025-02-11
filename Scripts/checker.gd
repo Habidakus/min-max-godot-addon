@@ -8,6 +8,15 @@ var poly : Polygon2D
 
 const SPEED : float = 350.0
 
+func clone() -> Checker:
+	var ret_val : Checker = Checker.new()
+	ret_val.alive = alive
+	ret_val.square = square
+	ret_val.move_dir = move_dir
+	ret_val.side = side
+	ret_val.poly = poly
+	return ret_val
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	poly = find_child("Polygon2D") as Polygon2D
