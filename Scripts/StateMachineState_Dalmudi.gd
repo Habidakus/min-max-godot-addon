@@ -17,7 +17,7 @@ var current_count : int = -1
 
 const max_rank : int = 7
 const side_border : int = 48
-const initial_seed : int = 12
+const initial_seed : int = -1
 
 var card_scene : Resource = preload("res://Scenes/card.tscn")
 

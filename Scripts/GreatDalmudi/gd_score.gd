@@ -56,12 +56,12 @@ func is_better_than(other : MMCScore) -> bool:
 	var other_they_won : bool = other_gd.their_hand_size == 0
 	if they_won != other_they_won:
 		return other_they_won
-	#var our_diff : int = their_hand_size - our_hand_size
-	#var other_our_diff : int = other_gd.their_hand_size - other_gd.our_hand_size
-	#if our_diff != other_our_diff:
-		#return our_diff < other_our_diff
-	#our_diff = their_hand_total - our_hand_total
-	#other_our_diff = other_gd.their_hand_total - other_gd.our_hand_total
-	#if our_diff != other_our_diff:
-		#return our_diff < other_our_diff
+	var our_diff : int = their_hand_size - our_hand_size
+	var other_our_diff : int = other_gd.their_hand_size - other_gd.our_hand_size
+	if our_diff != other_our_diff:
+		return our_diff < other_our_diff
+	our_diff = their_hand_total - our_hand_total
+	other_our_diff = other_gd.their_hand_total - other_gd.our_hand_total
+	if our_diff != other_our_diff:
+		return our_diff < other_our_diff
 	return false
