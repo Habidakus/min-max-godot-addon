@@ -1,7 +1,7 @@
 extends StateMachineState
 
 var game_manager : SMSCheckers
-const search_depth : int = 4
+const search_depth : int = 3
 
 func init(sms_checkers : SMSCheckers) -> void:
 	game_manager = sms_checkers
