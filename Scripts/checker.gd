@@ -5,6 +5,7 @@ var square : Vector2i
 var move_dir : int = 0
 var side : int = 0
 var poly : Polygon2D
+var pending_hops : Array[Vector2i]
 
 const SPEED : float = 550.0
 
@@ -41,7 +42,15 @@ func highlight(color : Color) -> void:
 func kill() -> void:
 	alive = false
 	square = Vector2i(-1, -1)
+	pending_hops.clear()
 	self.hide()
+
+func handle_pending_hops() -> bool:
+	if pending_hops.is_empty():
+		return false
+	square = pending_hops[0]
+	pending_hops.remove_at(0)
+	return true
 
 func move(board : GridContainer, delta : float) -> bool:
 	if alive == false:
@@ -55,12 +64,12 @@ func move(board : GridContainer, delta : float) -> bool:
 			if board_square_loc == square:
 				var center : Vector2 = board_square.global_position + board_square.size / 2
 				if global_position == center:
-					return false
+					return handle_pending_hops()
 				var vector_to : Vector2 = center - global_position
 				var dist_squared = vector_to.length_squared()
 				if dist_squared < travel_dist * travel_dist:
 					global_position = center
-					return false
+					return handle_pending_hops()
 				global_position = global_position + vector_to.normalized() * travel_dist
 				return true
 	assert(false)

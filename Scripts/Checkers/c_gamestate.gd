@@ -20,7 +20,7 @@ func apply_action(action : MMCAction) -> MMCGameState:
 		var clone : Checker = checker.clone()
 		if checker == move.checker:
 			clone.square = move.get_final_location()
-		elif checker == move.foe:
+		elif move.foes.has(checker):
 			clone.kill()
 		ret_val.pieces.append(clone)
 	return ret_val
@@ -58,12 +58,40 @@ func get_moves_in_direction(checker : Checker, dir : Vector2i) -> Array[MMCActio
 	if dest_contents == SquareContents.empty:
 		ret_val.append(CAction.create_move(checker, dest, self))
 		return ret_val
-	var hop_loc : Vector2i = dest + dir
-	# We've got an enemy there
-	var hop_contents : SquareContents = get_contents(hop_loc, checker.side)
-	if hop_contents == SquareContents.empty:
-		ret_val.append(CAction.create_attack(checker, get_checker(dest), hop_loc, self))
+	var list_of_multi_hops : Array[Array] = get_multi_hops(checker, get_checker(dest), dest + dir)
+	if list_of_multi_hops.is_empty():
+		return ret_val
+	for journey : Array in list_of_multi_hops:
+		ret_val.append(CAction.create_attack(checker, journey, self))
+	return ret_val
 
+func get_multi_hops(checker : Checker, foe : Checker, hop_loc : Vector2i) -> Array[Array]:
+	# hop_loc guarenteed to have jumped over foe
+	var ret_val : Array[Array]
+	var hop_contents : SquareContents = get_contents(hop_loc, checker.side)
+	if hop_contents != SquareContents.empty:
+		return ret_val
+	var extention_hops : Array[Array]
+	var right_dir : Vector2i = Vector2i(1, checker.move_dir)
+	var right_contents : SquareContents = get_contents(hop_loc + right_dir, checker.side)
+	if right_contents == SquareContents.enemy:
+		var right_multi_hops : Array[Array] = get_multi_hops(checker, get_checker(hop_loc + right_dir), hop_loc + right_dir + right_dir)
+		extention_hops.append_array(right_multi_hops)
+	var left_dir : Vector2i = Vector2i(-1, checker.move_dir)
+	var left_contents : SquareContents = get_contents(hop_loc + left_dir, checker.side)
+	if left_contents == SquareContents.enemy:
+		var left_multi_hops : Array[Array] = get_multi_hops(checker, get_checker(hop_loc + left_dir), hop_loc + left_dir + left_dir)
+		extention_hops.append_array(left_multi_hops)
+	var hop : Array = [foe, hop_loc]
+	if extention_hops.is_empty():
+		var journey : Array[Array] = [hop]
+		ret_val.append(journey)
+	else:
+		for journey : Array in extention_hops:
+			var total_journey : Array[Array]
+			total_journey.append(hop)
+			total_journey.append_array(journey)
+			ret_val.append(total_journey)
 	return ret_val
 		
 func get_moves() -> Array[MMCAction]:
