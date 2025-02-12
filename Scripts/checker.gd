@@ -5,10 +5,12 @@ var square : Vector2i
 var move_dir : int = 0
 var side : int = 0
 var poly : Polygon2D
+var crown : Sprite2D
 var pending_hops : Array[Vector2i]
 
 const SPEED : float = 550.0
 
+# This just clones the glass, not the scene
 func clone() -> Checker:
 	var ret_val : Checker = Checker.new()
 	ret_val.alive = alive
@@ -21,14 +23,25 @@ func clone() -> Checker:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	poly = find_child("Polygon2D") as Polygon2D
+	crown = find_child("Crown") as Sprite2D
 
 func init(x : int, y : int, dir : int, player : int) -> void:
 	alive = true
 	show()
 	square = Vector2i(x, y)
 	move_dir = dir
+	if move_dir != 0:
+		crown.hide()
 	side = player
 	set_default_color()
+
+func king() -> void:
+	if crown: # If we're just a simulated checker in a game state calculation, we won't have a crown
+		crown.show()
+	move_dir = 0 # Zero is the sentinel value for both directions
+	
+func is_king() -> bool:
+	return move_dir == 0
 
 func set_default_color() -> void:
 	if side == 1:

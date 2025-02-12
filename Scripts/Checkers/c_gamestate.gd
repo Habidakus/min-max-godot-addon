@@ -20,6 +20,11 @@ func apply_action(action : MMCAction) -> MMCGameState:
 		var clone : Checker = checker.clone()
 		if checker == move.checker:
 			clone.square = move.get_final_location()
+			if !clone.is_king():
+				if clone.square.y == 0 && clone.side == 2:
+					clone.king()
+				elif clone.square.y == board_size - 1 && clone.side == 1:
+					clone.king()
 		elif move.foes.has(checker):
 			clone.kill()
 		ret_val.pieces.append(clone)
@@ -58,30 +63,45 @@ func get_moves_in_direction(checker : Checker, dir : Vector2i) -> Array[MMCActio
 	if dest_contents == SquareContents.empty:
 		ret_val.append(CAction.create_move(checker, dest, self))
 		return ret_val
-	var list_of_multi_hops : Array[Array] = get_multi_hops(checker, get_checker(dest), dest + dir)
+	var already_cleared_foes : Array[Checker]
+	var list_of_multi_hops : Array[Array] = get_multi_hops(checker, get_checker(dest), dest + dir, already_cleared_foes)
 	if list_of_multi_hops.is_empty():
 		return ret_val
 	for journey : Array in list_of_multi_hops:
 		ret_val.append(CAction.create_attack(checker, journey, self))
 	return ret_val
 
-func get_multi_hops(checker : Checker, foe : Checker, hop_loc : Vector2i) -> Array[Array]:
+func get_multi_hops(checker : Checker, foe : Checker, hop_loc : Vector2i, already_jumped_foes : Array[Checker]) -> Array[Array]:
 	# hop_loc guarenteed to have jumped over foe
 	var ret_val : Array[Array]
 	var hop_contents : SquareContents = get_contents(hop_loc, checker.side)
 	if hop_contents != SquareContents.empty:
 		return ret_val
 	var extention_hops : Array[Array]
-	var right_dir : Vector2i = Vector2i(1, checker.move_dir)
-	var right_contents : SquareContents = get_contents(hop_loc + right_dir, checker.side)
-	if right_contents == SquareContents.enemy:
-		var right_multi_hops : Array[Array] = get_multi_hops(checker, get_checker(hop_loc + right_dir), hop_loc + right_dir + right_dir)
-		extention_hops.append_array(right_multi_hops)
-	var left_dir : Vector2i = Vector2i(-1, checker.move_dir)
-	var left_contents : SquareContents = get_contents(hop_loc + left_dir, checker.side)
-	if left_contents == SquareContents.enemy:
-		var left_multi_hops : Array[Array] = get_multi_hops(checker, get_checker(hop_loc + left_dir), hop_loc + left_dir + left_dir)
-		extention_hops.append_array(left_multi_hops)
+	var multi_hops : Array[Array]
+	var already_cleared_foes : Array[Checker]
+	already_cleared_foes.append_array(already_jumped_foes)
+	already_cleared_foes.append(foe)
+	if checker.is_king():
+		multi_hops = get_multi_hops_from_direction(checker, hop_loc, Vector2i(1, 1), already_cleared_foes)
+		if multi_hops != null && !multi_hops.is_empty():
+			extention_hops.append_array(multi_hops)
+		multi_hops = get_multi_hops_from_direction(checker, hop_loc, Vector2i(-1, 1), already_cleared_foes)
+		if multi_hops != null && !multi_hops.is_empty():
+			extention_hops.append_array(multi_hops)
+		multi_hops = get_multi_hops_from_direction(checker, hop_loc, Vector2i(1, -1), already_cleared_foes)
+		if multi_hops != null && !multi_hops.is_empty():
+			extention_hops.append_array(multi_hops)
+		multi_hops = get_multi_hops_from_direction(checker, hop_loc, Vector2i(-1, -1), already_cleared_foes)
+		if multi_hops != null && !multi_hops.is_empty():
+			extention_hops.append_array(multi_hops)
+	else:
+		multi_hops = get_multi_hops_from_direction(checker, hop_loc, Vector2i(1, checker.move_dir), already_cleared_foes)
+		if multi_hops != null && !multi_hops.is_empty():
+			extention_hops.append_array(multi_hops)
+		multi_hops = get_multi_hops_from_direction(checker, hop_loc, Vector2i(-1, checker.move_dir), already_cleared_foes)
+		if multi_hops != null && !multi_hops.is_empty():
+			extention_hops.append_array(multi_hops)
 	var hop : Array = [foe, hop_loc]
 	if extention_hops.is_empty():
 		var journey : Array[Array] = [hop]
@@ -93,7 +113,16 @@ func get_multi_hops(checker : Checker, foe : Checker, hop_loc : Vector2i) -> Arr
 			total_journey.append_array(journey)
 			ret_val.append(total_journey)
 	return ret_val
-		
+
+func get_multi_hops_from_direction(checker : Checker, hop_loc : Vector2i, dir : Vector2i, already_jumped_foes : Array[Checker]) -> Array[Array]:
+	var right_contents : SquareContents = get_contents(hop_loc + dir, checker.side)
+	if right_contents == SquareContents.enemy:
+		var foe : Checker = get_checker(hop_loc + dir)
+		if !already_jumped_foes.has(foe):
+			return get_multi_hops(checker, foe, hop_loc + dir + dir, already_jumped_foes)
+	var empty : Array[Array]
+	return empty
+			
 func get_moves() -> Array[MMCAction]:
 	var ret_val : Array[MMCAction]
 	for checker : Checker in pieces:

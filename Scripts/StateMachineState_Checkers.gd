@@ -126,6 +126,11 @@ func commit_move(move : CAction) -> void:
 		checkers_state_machine.switch_state("State_GameOver")
 	else:
 		move.checker.pending_hops = move.moves
+		if !move.checker.is_king():
+			if move.get_final_location().y == 0 && move.checker.side == 2:
+				move.checker.king()
+			elif move.get_final_location().y == board_size - 1 && move.checker.side == 1:
+				move.checker.king()
 		for foe in move.foes:
 			foe.kill()
 		checkers_state_machine.switch_state("State_PiecesMoving")

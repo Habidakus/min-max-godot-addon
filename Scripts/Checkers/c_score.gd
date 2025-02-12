@@ -16,7 +16,7 @@ static func create(game_state : CGameState) -> CScore:
 	for checker : Checker in game_state.pieces:
 		if checker.alive:
 			board_values[checker.square] = checker.side
-			if checker.move_dir == 0:
+			if checker.is_king():
 				var our_piece : bool = (checker.side == 2) == game_state.human_turn
 				if our_piece:
 					ret_val.king_dominance += 1
@@ -76,7 +76,7 @@ func _to_string() -> String:
 func is_better_than(other : MMCScore) -> bool:
 	var cother : CScore = other as CScore
 	if king_dominance != cother.king_dominance:
-		return king_dominance > cother.king_dominanc
+		return king_dominance > cother.king_dominance
 	if piece_dominance != cother.piece_dominance:
 		return piece_dominance > cother.piece_dominance
 	if danger_piece_dominance != cother.danger_piece_dominance:
