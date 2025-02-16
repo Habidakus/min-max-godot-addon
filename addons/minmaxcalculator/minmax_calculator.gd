@@ -1,4 +1,4 @@
-class_name MinMaxCalculator extends Object
+class_name MinMaxCalculator extends RefCounted
 
 ## An generic alpha beta pruning tree to implement deterministic best move calculations.
 ##

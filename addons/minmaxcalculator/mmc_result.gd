@@ -1,4 +1,4 @@
-class_name MMCResult extends Object
+class_name MMCResult extends RefCounted
 ## Helper class for MinMaxCalculator
 ##
 ## There's nothing you need to see here, unless you're just looking around

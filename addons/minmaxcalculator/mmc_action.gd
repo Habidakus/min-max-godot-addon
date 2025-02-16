@@ -1,4 +1,4 @@
-class_name MMCAction extends Object
+class_name MMCAction extends RefCounted
 ## Reprentation of one valid move that a player could take from a given [MMCGameState]
 ##
 ## You must provide a derived class that extends [MMCAction] and implements the get_score() function

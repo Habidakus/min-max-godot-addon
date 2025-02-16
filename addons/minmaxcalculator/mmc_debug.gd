@@ -1,4 +1,4 @@
-class_name MMCDebug extends Object
+class_name MMCDebug extends RefCounted
 ## Class used to help debug usage of the [MinMaxCalculator]
 ##
 ## If you're having trouble determining why one action was chosen over another, and suspect there's

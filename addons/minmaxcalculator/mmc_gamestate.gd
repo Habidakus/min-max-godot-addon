@@ -1,4 +1,4 @@
-class_name MMCGameState extends Object
+class_name MMCGameState extends RefCounted
 ## Base class that represents a game state for the [MinMaxCalculator]
 ##
 ## When using the [MinMaxCalculator] you should create your own class that derives from this class

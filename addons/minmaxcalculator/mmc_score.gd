@@ -1,4 +1,4 @@
-class_name MMCScore extends Object
+class_name MMCScore extends RefCounted
 ## Reprentation of worth that any given [MMCAction] is if commited to a [MMCGameState]
 ##
 ## You must provide a derived class that extends [MMCScore] and your own implementation of the
