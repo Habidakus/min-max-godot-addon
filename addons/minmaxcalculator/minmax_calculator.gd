@@ -39,7 +39,7 @@ func _get_best_action_internal(game_state : MMCGameState, actorsLowerBound: MMCS
 		return MMCResult.create_score_only(game_state.get_score())
 
 	var actions : Array[MMCAction] = game_state.get_moves()
-	actions.sort_custom(func(a : MMCAction, b : MMCAction) : return a.get_score().is_better_than(b.get_score()))
+	actions.sort_custom(func(a : MMCAction, b : MMCAction) : return b.get_score().is_better_than(a.get_score()))
 	if debug != null:
 		debug._add_actions(game_state, actions)
 		
