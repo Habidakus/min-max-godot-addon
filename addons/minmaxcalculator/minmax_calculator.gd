@@ -32,14 +32,20 @@ func get_best_action(game_state : MMCGameState, depth : int = _max_int, debug : 
 		return result.action
 
 func _get_best_action_internal(game_state : MMCGameState, actorsLowerBound: MMCScore, actorsUpperBound: MMCScore, depth : int, debug : MMCDebug) -> MMCResult:
-	var actions : Array[MMCAction] = game_state.get_moves()
-	if debug != null:
-		debug._add_actions(game_state, actions)
-	if actions.is_empty() || depth == 0:
+	if depth == 0:
+		if debug != null:
+			debug._add_actions(game_state, [])
 		# Action is a terminal (leaf) action, so there are no counters to it
 		return MMCResult.create_score_only(game_state.get_score())
-	
+
+	var actions : Array[MMCAction] = game_state.get_moves()
 	actions.sort_custom(func(a : MMCAction, b : MMCAction) : return a.get_score().is_better_than(b.get_score()))
+	if debug != null:
+		debug._add_actions(game_state, actions)
+		
+	if actions.is_empty():
+		# Action is a terminal (leaf) action, so there are no counters to it
+		return MMCResult.create_score_only(game_state.get_score())
 	
 	var best : MMCResult = null
 	for i : int in range(0, actions.size()):
@@ -55,7 +61,7 @@ func _get_best_action_internal(game_state : MMCGameState, actorsLowerBound: MMCS
 			best = MMCResult.create(action, result_score)
 		elif result_score.is_better_than(best.score):
 			best = MMCResult.create(action, result_score)
-		if MMCScore._is_first_better_than_second(result_score, actorsLowerBound):
+		if MMCScore._is_first_better_than_second(best.score, actorsLowerBound):
 			actorsLowerBound = result_score
 		if MMCScore._is_first_better_than_or_equal_to_second(actorsLowerBound, actorsUpperBound):
 			return best
