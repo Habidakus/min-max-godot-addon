@@ -20,8 +20,8 @@ func apply_action(action : MMCAction) -> MMCGameState:
 	return null
 
 ## Returns the list of all legal moves that the current player could make in the current game state.
-func get_moves() -> Array[MMCAction]:
-	assert(false, "The derived MMCGameState class must implement get_moves()")
+func get_sorted_moves() -> Array[MMCAction]:
+	assert(false, "The derived MMCGameState class must implement get_sorted_moves()")
 	return []
 
 ## Returns the current worth of the game state from the point of view of the player who provided

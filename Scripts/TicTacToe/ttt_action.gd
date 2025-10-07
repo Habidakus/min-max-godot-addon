@@ -13,8 +13,8 @@ var score : TTTScore = null
 func _to_string() -> String:
 	return "square=" + str(square) + ", score=" + str(score)
 
-func get_score() -> MMCScore:
-	return score
+#func get_score() -> MMCScore:
+#	return score
 
 #func get_followup_moves() -> Array[MMCAction]:
 	#var place_value : int = -1 if xs_turn else 1

@@ -14,8 +14,8 @@ class_name MMCAction extends RefCounted
 ## then you could just implement calling something like [code]current_game_state.apply_action(self).get_score()[/code],
 ## although to speed things up, the score should be cached whenever possible so that for each game_state->action->game_state
 ## only one score is ever generated.
-func get_score() -> MMCScore:
-	# Should evaluate how good the current action leaves the game for the acting player
-	# For performance reasons this should be generated when the action was created, or JIT created and left in a quickly parsable format.
-	assert(false, "The derived MMCAction class must implement get_score()")
-	return null
+#func get_score() -> MMCScore:
+#	# Should evaluate how good the current action leaves the game for the acting player
+#	# For performance reasons this should be generated when the action was created, or JIT created and left in a quickly parsable format.
+#	assert(false, "The derived MMCAction class must implement get_score()")
+#	return null

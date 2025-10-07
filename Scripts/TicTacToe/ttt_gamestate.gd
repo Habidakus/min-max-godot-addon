@@ -40,18 +40,19 @@ func apply_action(action : MMCAction) -> MMCGameState:
 
 func is_ended() -> bool:
 	var score : TTTScore = TTTScore.create(self)
-	if score.is_loss || score.is_victory:
+	if score.x_victory || score.o_victory:
 		return true
 	for i in squares.size():
 		if squares[i] == 0:
 			return false
 	return true
 
-func get_moves() -> Array[MMCAction]:
+func get_sorted_moves() -> Array[MMCAction]:
 	var ret_val : Array[MMCAction]
 	var current_score : TTTScore = TTTScore.create(self)
-	if current_score.is_loss || current_score.is_victory:
+	if current_score.x_victory || current_score.x_victory:
 		return ret_val
+	#TODO: Must return this list in sorted order
 	for i in squares.size():
 		if squares[i] == 0:
 			var move : TTTAction = TTTAction.new()

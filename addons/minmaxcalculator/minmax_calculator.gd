@@ -24,46 +24,46 @@ const _max_int : int = 9223372036854775807
 ## then call the [method MMCDebug.dump] function on to get the entire tree that the function derived (you might need
 ## to implement the _to_string() function on your implementation of the Game State, Action, and Score
 ## classes to get understandable output).
-func get_best_action(game_state : MMCGameState, depth : int = _max_int, debug : MMCDebug = null) -> MMCAction:
-	var result : MMCResult = _get_best_action_internal(game_state, MMCScore._LOWEST, MMCScore._HIGHEST, depth, debug)
+func get_best_action(game_state : MMCGameState, depth : int = _max_int) -> MMCAction:
+	var result : MMCResult = _get_best_action_internal(game_state, MMCScore._LOWEST, MMCScore._HIGHEST, depth, 1)
 	if result == null:
 		return null
 	else:
 		return result.action
 
-func _get_best_action_internal(game_state : MMCGameState, actorsLowerBound: MMCScore, actorsUpperBound: MMCScore, depth : int, debug : MMCDebug) -> MMCResult:
+func _get_best_action_internal(game_state : MMCGameState, actorsLowerBound: MMCScore, actorsUpperBound: MMCScore, depth : int, color : int) -> MMCResult:
 	if depth == 0:
-		if debug != null:
-			debug._add_actions(game_state, [])
-		# Action is a terminal (leaf) action, so there are no counters to it
-		return MMCResult.create_score_only(game_state.get_score())
+		if color > 0:
+			return MMCResult.create_score_only(game_state.get_score())
+		else:
+			return MMCResult.create_score_only(game_state.get_score().reversed())
 
-	var actions : Array[MMCAction] = game_state.get_moves()
-	actions.sort_custom(func(a : MMCAction, b : MMCAction) : return b.get_score().is_better_than(a.get_score()))
-	if debug != null:
-		debug._add_actions(game_state, actions)
-		
+	var actions : Array[MMCAction] = game_state.get_sorted_moves()
+	#actions.sort_custom(func(a : MMCAction, b : MMCAction) : return b.get_score().is_better_than(a.get_score()))
 	if actions.is_empty():
-		# Action is a terminal (leaf) action, so there are no counters to it
-		return MMCResult.create_score_only(game_state.get_score())
-	
+		if color > 0:
+			return MMCResult.create_score_only(game_state.get_score())
+		else:
+			return MMCResult.create_score_only(game_state.get_score().reversed())
+
 	var best : MMCResult = null
 	for i : int in range(0, actions.size()):
 		var action : MMCAction = actions[i]
 		var post_action_state : MMCGameState = game_state.apply_action(action)
 		var actorsUpperBoundReversed : MMCScore = actorsUpperBound.reversed()
 		var actorsLowerBoundReversed : MMCScore = actorsLowerBound.reversed()
-		var result : MMCResult = _get_best_action_internal(post_action_state, actorsUpperBoundReversed, actorsLowerBoundReversed, depth - 1, debug)
-		var result_score : MMCScore = result.score.reversed()
-		if debug != null:
-			debug._add_result(game_state, action, post_action_state, result_score)
+
+		var result : MMCResult = _get_best_action_internal(post_action_state, actorsUpperBoundReversed, actorsLowerBoundReversed, depth - 1, 0 - color)
+
+		var reversed_score : MMCScore = result.score.reversed()
 		if best == null:
-			best = MMCResult.create(action, result_score)
-		elif result_score.is_better_than(best.score):
-			best = MMCResult.create(action, result_score)
+			best = MMCResult.create(action, reversed_score)
+		elif reversed_score.is_better_than(best.score):
+			best = MMCResult.create(action, reversed_score)
+			
 		if MMCScore._is_first_better_than_second(best.score, actorsLowerBound):
-			actorsLowerBound = result_score
+			actorsLowerBound = best.score
 		if MMCScore._is_first_better_than_or_equal_to_second(actorsLowerBound, actorsUpperBound):
-			return best
+			break
 			
 	return best

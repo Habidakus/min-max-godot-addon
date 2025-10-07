@@ -1,21 +1,19 @@
 class_name MMCScore extends RefCounted
-## Reprentation of worth that any given [MMCAction] is if commited to a [MMCGameState]
-##
-## You must provide a derived class that extends [MMCScore] and your own implementation of the
+## Representation of worth that any given [INMAction] to the computer player (the [method CreateReverse]
+## function will always return the value of any action from the point of view of the human opponent).
+## 
+## You must provide a derived class that extends [NMScore] and your own implementation of the
 ## [method reversed] and [method is_better_than] functions.
 
-## Returns the exact opposite of the current score. For instance, if the current score reflects
-## a chess board where black has just taken white's queen from black's persepective -- the reverse
-## would that same chess board from white's perspective (eg, one queen down). Note that you do not
-## necessarily need to have a score implemention know which player it currently has, only the
-## abstract that from one viewpoint it is a queen up, and from the reversed viewpoint it is a queen
-## down.
+## Return the inverse of the current score. If the score is being kept in a simple numeric value, this
+## can be as simple a returning [score] * -1.  However if the score is more complex you might need to
+## provide more extensive logic here.
 func reversed() -> MMCScore:
 	assert(false, "The derived MMCScore class must implement reversed()")
 	return null
 
-## Compare the current score with another one, and return true if the current score is certainly
-## better than the other one (eg: should return false if they are essentially equal, let alone worse).
+## Returns true only if the current score is better for the Computer Player (the one we're doing all this
+## computation for) than it would be for the human opponent.
 func is_better_than(other : MMCScore) -> bool:
 	assert(false, "The derived MMCScore class must implement is_better_than()")
 	return false
