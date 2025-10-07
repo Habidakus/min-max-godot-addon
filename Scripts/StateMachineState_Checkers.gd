@@ -65,7 +65,7 @@ func checker_mouse_entered(square : ColorRect) -> void:
 	for checker : Checker in pieces:
 		if checker.alive == false:
 			continue
-		if checker.side == 2:
+		if checker.side == Checker.HUMAN:
 			if checker.square == square_loc:
 				checker_entered.emit(checker)
 				return
@@ -127,9 +127,9 @@ func commit_move(move : CAction) -> void:
 	else:
 		move.checker.pending_hops = move.moves
 		if !move.checker.is_king():
-			if move.get_final_location().y == 0 && move.checker.side == 2:
+			if move.get_final_location().y == 0 && move.checker.side == Checker.HUMAN:
 				move.checker.king()
-			elif move.get_final_location().y == board_size - 1 && move.checker.side == 1:
+			elif move.get_final_location().y == board_size - 1 && move.checker.side == Checker.COMPUTER:
 				move.checker.king()
 		for foe in move.foes:
 			foe.kill()

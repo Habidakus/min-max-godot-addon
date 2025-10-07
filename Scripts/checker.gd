@@ -8,6 +8,8 @@ var poly : Polygon2D
 var crown : Sprite2D
 var pending_hops : Array[Vector2i]
 
+const COMPUTER : int = 1
+const HUMAN : int = 2
 const SPEED : float = 550.0
 
 # This just clones the glass, not the scene

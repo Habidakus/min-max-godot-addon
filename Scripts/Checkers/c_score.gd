@@ -1,9 +1,9 @@
 class_name CScore extends MMCScore
 
-var piece_dominance : int = 0
-var vulnerable_piece_dominance : int = 0
-var danger_piece_dominance : int = 0
-var king_dominance : int = 0
+var computer_piece_dominance : int = 0
+var computer_vulnerable_piece_dominance : int = 0
+var computer_danger_piece_dominance : int = 0
+var computer_king_dominance : int = 0
 
 static func create(game_state : CGameState) -> CScore:
 	var ret_val : CScore = CScore.new()
@@ -17,24 +17,24 @@ static func create(game_state : CGameState) -> CScore:
 		if checker.alive:
 			board_values[checker.square] = checker.side
 			if checker.is_king():
-				var our_piece : bool = (checker.side == 2) == game_state.human_turn
-				if our_piece:
-					ret_val.king_dominance += 1
+				var computer_piece : bool = (checker.side == Checker.COMPUTER)
+				if computer_piece:
+					ret_val.computer_king_dominance += 1
 				else:
-					ret_val.king_dominance -= 1
+					ret_val.computer_king_dominance -= 1
 	for checker : Checker in game_state.pieces:
 		if checker.alive:
-			var our_piece : bool = (checker.side == 2) == game_state.human_turn
-			if our_piece:
-				ret_val.piece_dominance += 1
+			var computer_piece : bool = (checker.side == Checker.COMPUTER)
+			if computer_piece:
+				ret_val.computer_piece_dominance += 1
 				var vul : Array[int] = how_vulnerable(checker, board_values)
-				ret_val.vulnerable_piece_dominance -= vul[0]
-				ret_val.danger_piece_dominance -= vul[1]
+				ret_val.computer_vulnerable_piece_dominance -= vul[0]
+				ret_val.computer_danger_piece_dominance -= vul[1]
 			else:
-				ret_val.piece_dominance -= 1
+				ret_val.computer_piece_dominance -= 1
 				var vul : Array[int] = how_vulnerable(checker, board_values)
-				ret_val.vulnerable_piece_dominance += vul[0]
-				ret_val.danger_piece_dominance += vul[1]
+				ret_val.computer_vulnerable_piece_dominance += vul[0]
+				ret_val.computer_danger_piece_dominance += vul[1]
 	return ret_val
 
 static func how_vulnerable(checker : Checker, board : Dictionary) -> Array[int]:
@@ -64,23 +64,23 @@ static func how_vulnerable(checker : Checker, board : Dictionary) -> Array[int]:
 	
 func reversed() -> MMCScore:
 	var ret_val : CScore = CScore.new()
-	ret_val.piece_dominance = 0 - piece_dominance
-	ret_val.king_dominance = 0 - king_dominance
-	ret_val.danger_piece_dominance = 0 - danger_piece_dominance
-	ret_val.vulnerable_piece_dominance = 0 - vulnerable_piece_dominance
+	ret_val.computer_piece_dominance = 0 - computer_piece_dominance
+	ret_val.computer_king_dominance = 0 - computer_king_dominance
+	ret_val.computer_danger_piece_dominance = 0 - computer_danger_piece_dominance
+	ret_val.computer_vulnerable_piece_dominance = 0 - computer_vulnerable_piece_dominance
 	return ret_val
 
 func _to_string() -> String:
-	return "k=" + str(king_dominance) + "/p=" + str(piece_dominance) + "/d=" + str(danger_piece_dominance) + "/v=" + str(vulnerable_piece_dominance)
+	return "k=" + str(computer_king_dominance) + "/p=" + str(computer_piece_dominance) + "/d=" + str(computer_danger_piece_dominance) + "/v=" + str(computer_vulnerable_piece_dominance)
 	
 func is_better_than(other : MMCScore) -> bool:
 	var cother : CScore = other as CScore
-	if king_dominance != cother.king_dominance:
-		return king_dominance > cother.king_dominance
-	if piece_dominance != cother.piece_dominance:
-		return piece_dominance > cother.piece_dominance
-	if danger_piece_dominance != cother.danger_piece_dominance:
-		return danger_piece_dominance > cother.danger_piece_dominance
-	if vulnerable_piece_dominance != cother.vulnerable_piece_dominance:
-		return vulnerable_piece_dominance > cother.vulnerable_piece_dominance
+	if computer_king_dominance != cother.computer_king_dominance:
+		return computer_king_dominance > cother.computer_king_dominance
+	if computer_piece_dominance != cother.computer_piece_dominance:
+		return computer_piece_dominance > cother.computer_piece_dominance
+	if computer_danger_piece_dominance != cother.computer_danger_piece_dominance:
+		return computer_danger_piece_dominance > cother.computer_danger_piece_dominance
+	if computer_vulnerable_piece_dominance != cother.computer_vulnerable_piece_dominance:
+		return computer_vulnerable_piece_dominance > cother.computer_vulnerable_piece_dominance
 	return false

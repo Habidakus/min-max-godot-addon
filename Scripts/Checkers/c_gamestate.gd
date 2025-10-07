@@ -21,9 +21,9 @@ func apply_action(action : MMCAction) -> MMCGameState:
 		if checker == move.checker:
 			clone.square = move.get_final_location()
 			if !clone.is_king():
-				if clone.square.y == 0 && clone.side == 2:
+				if clone.square.y == 0 && clone.side == Checker.HUMAN:
 					clone.king()
-				elif clone.square.y == board_size - 1 && clone.side == 1:
+				elif clone.square.y == board_size - 1 && clone.side == Checker.COMPUTER:
 					clone.king()
 		elif move.foes.has(checker):
 			clone.kill()
@@ -136,7 +136,7 @@ func get_moves() -> Array[MMCAction]:
 	for checker : Checker in pieces:
 		if checker.alive == false:
 			continue
-		if (checker.side == 2) == human_turn:
+		if (checker.side == Checker.HUMAN) == human_turn:
 			if checker.move_dir != 1:
 				ret_val.append_array(get_moves_in_direction(checker, Vector2i(-1, -1)))
 				ret_val.append_array(get_moves_in_direction(checker, Vector2i(1, -1)))
