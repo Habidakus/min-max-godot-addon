@@ -52,13 +52,13 @@ func get_current_game_state() -> GDGameState:
 	var ret_val : GDGameState = GDGameState.new()
 	ret_val.current_count = current_count
 	ret_val.current_rank = current_rank
-	ret_val.player_1_last_played_a_card = true if player_who_last_played == 1 else false
+	ret_val.ai_last_played_a_card = true if player_who_last_played == 1 else false
 
 	for card : Card in cards:
 		if card.player == 1:
-			ret_val.player_1_hand.append(card.rank)
+			ret_val.ai_hand.append(card.rank)
 		elif card.player == 2:
-			ret_val.player_2_hand.append(card.rank)
+			ret_val.human_hand.append(card.rank)
 	return ret_val
 
 func mouse_entered(mouse_card : Card) -> void:
@@ -69,7 +69,7 @@ func mouse_entered(mouse_card : Card) -> void:
 	if pending_ai_move != null:
 		return
 	var game_state : GDGameState = get_current_game_state()
-	game_state.player_1_turn = false
+	game_state.ai_turn = false
 	var possible_moves : Array[MMCAction] = game_state.get_moves()
 	var valid_move : bool = false
 	for move : MMCAction in possible_moves:
@@ -128,12 +128,15 @@ func move_ai_cards() -> void:
 	cards_moving = true
 	
 	var game_state : GDGameState = get_current_game_state()
-	game_state.player_1_turn = false
+	game_state.ai_turn = false
 	var moves : Array[MMCAction] = game_state.get_moves()
 	if moves.is_empty():
-		var score : MMCScore = game_state.get_score()
-		var game_over_text : String = "Victory" if score.is_better_than(score.reversed()) else "Loss"
-		show_game_over(game_over_text)
+		if game_state.human_hand.is_empty():
+			show_game_over("Win")
+		elif game_state.ai_hand.is_empty():
+			show_game_over("Loss")
+		else:
+			show_game_over("??confusion??")
 	elif game_state.must_pass(moves):
 		pass_button.show()
 
@@ -169,7 +172,7 @@ func gui_input(event: InputEvent, mouse_card : Card) -> void:
 	if mouse_card.player != 2:
 		return
 	var game_state : GDGameState = get_current_game_state()
-	game_state.player_1_turn = false
+	game_state.ai_turn = false
 	var possible_moves : Array[MMCAction] = game_state.get_moves()
 	var valid_move : bool = false
 	for move : MMCAction in possible_moves:
@@ -208,12 +211,15 @@ func gui_input(event: InputEvent, mouse_card : Card) -> void:
 	cards_moving = true
 	
 	game_state = get_current_game_state()
-	game_state.player_1_turn = true
+	game_state.ai_turn = true
 	var moves : Array[MMCAction] = game_state.get_moves()
 	if moves.is_empty():
-		var score : MMCScore = game_state.get_score()
-		var game_over_text : String = "Loss" if score.is_better_than(score.reversed()) else "Victory"
-		show_game_over(game_over_text)
+		if game_state.human_hand.is_empty():
+			show_game_over("Win")
+		elif game_state.ai_hand.is_empty():
+			show_game_over("Loss")
+		else:
+			show_game_over("??confusion??")
 	else:
 		pending_ai_move = calc.get_best_action(game_state)
 
@@ -282,11 +288,14 @@ func enter_state() -> void:
 
 func _on_pass_turn_button_up() -> void:
 	var game_state : GDGameState = get_current_game_state()
-	game_state.player_1_turn = true
+	game_state.ai_turn = true
 	var moves : Array[MMCAction] = game_state.get_moves()
 	if moves.is_empty():
-		var score : MMCScore = game_state.get_score()
-		var game_over_text : String = "Loss" if score.is_better_than(score.reversed()) else "Victory"
-		show_game_over(game_over_text)
+		if game_state.human_hand.is_empty():
+			show_game_over("Win")
+		elif game_state.ai_hand.is_empty():
+			show_game_over("Loss")
+		else:
+			show_game_over("??confusion??")
 	else:
 		pending_ai_move = calc.get_best_action(game_state)

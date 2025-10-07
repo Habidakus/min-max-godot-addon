@@ -47,12 +47,14 @@ func is_ended() -> bool:
 			return false
 	return true
 
-func get_sorted_moves() -> Array[MMCAction]:
+## Returns the list of all legal moves that the current player could make in the current game state.
+## Ideally you should sort the moves so that the best moves for the current player (indicated by the
+## [_for_computer_player] argument) are first, and the worst moves are last.
+func get_sorted_moves(_for_computer_player : bool) -> Array[MMCAction]:
 	var ret_val : Array[MMCAction]
 	var current_score : TTTScore = TTTScore.create(self)
 	if current_score.x_victory || current_score.x_victory:
 		return ret_val
-	#TODO: Must return this list in sorted order
 	for i in squares.size():
 		if squares[i] == 0:
 			var move : TTTAction = TTTAction.new()

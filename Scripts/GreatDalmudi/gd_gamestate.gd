@@ -1,9 +1,9 @@
 class_name GDGameState extends MMCGameState
 
-var player_1_turn : bool = true
-var player_1_last_played_a_card : bool = false
-var player_1_hand : Array[int]
-var player_2_hand : Array[int]
+var ai_turn : bool = true
+var ai_last_played_a_card : bool = false
+var ai_hand : Array[int]
+var human_hand : Array[int]
 var current_rank : int = -1
 var current_count : int = -1
 
@@ -18,18 +18,18 @@ static func create_initial_state(s : int, max_rank : int) -> GDGameState:
 	var ret_val : GDGameState = GDGameState.new()
 	for i in range(0, deck.size()):
 		if i % 2 == 0:
-			ret_val.player_1_hand.append(deck[i][0])
+			ret_val.ai_hand.append(deck[i][0])
 		else:
-			ret_val.player_2_hand.append(deck[i][0])
+			ret_val.human_hand.append(deck[i][0])
 	return ret_val
 
 func _to_string() -> String:
-	return dump_current() + " : " + dump_hand(player_1_hand, !player_1_turn) + " / "+ dump_hand(player_2_hand, player_1_turn)
+	return dump_current() + " : " + dump_hand(ai_hand, !ai_turn) + " / "+ dump_hand(human_hand, ai_turn)
 
 func dump_current() -> String:
 	if current_rank == -1:
 		return "ANY"
-	elif player_1_last_played_a_card == player_1_turn:
+	elif ai_last_played_a_card == ai_turn:
 		return "PASS"
 	else:
 		var ret_val : String = ""
@@ -49,26 +49,26 @@ func dump_hand(hand : Array[int], just_went : bool) -> String:
 func apply_action(action : MMCAction) -> MMCGameState:
 	var ret_val : GDGameState = GDGameState.new()
 	if action.rank != -1:
-		if player_1_turn:
-			ret_val.current_count = player_1_hand.count(action.rank)
-			ret_val.player_1_hand = player_1_hand.filter(func(a) : return a != action.rank)
-			ret_val.player_2_hand = player_2_hand
-			ret_val.player_1_last_played_a_card = true
+		if ai_turn:
+			ret_val.current_count = ai_hand.count(action.rank)
+			ret_val.ai_hand = ai_hand.filter(func(a) : return a != action.rank)
+			ret_val.human_hand = human_hand
+			ret_val.ai_last_played_a_card = true
 		else:
-			ret_val.current_count = player_2_hand.count(action.rank)
-			ret_val.player_1_hand = player_1_hand
-			ret_val.player_2_hand = player_2_hand.filter(func(a) : return a != action.rank)
-			ret_val.player_1_last_played_a_card = false
+			ret_val.current_count = human_hand.count(action.rank)
+			ret_val.ai_hand = ai_hand
+			ret_val.human_hand = human_hand.filter(func(a) : return a != action.rank)
+			ret_val.ai_last_played_a_card = false
 		ret_val.current_rank = action.rank
 	else:
-		for card in player_1_hand:
-			ret_val.player_1_hand.append(card)
-		for card in player_2_hand:
-			ret_val.player_2_hand.append(card)
-		ret_val.player_1_last_played_a_card = player_1_last_played_a_card
+		for card in ai_hand:
+			ret_val.ai_hand.append(card)
+		for card in human_hand:
+			ret_val.human_hand.append(card)
+		ret_val.ai_last_played_a_card = ai_last_played_a_card
 		ret_val.current_count = current_count
 		ret_val.current_rank = current_rank
-	ret_val.player_1_turn = !player_1_turn
+	ret_val.ai_turn = !ai_turn
 	return ret_val
 
 func must_pass(moves : Array[MMCAction]) -> bool:
@@ -78,13 +78,21 @@ func must_pass(moves : Array[MMCAction]) -> bool:
 		return (moves[0] as GDAction).rank <= 0
 	return false
 
+## Returns the list of all legal moves that the current player could make in the current game state.
+## Ideally you should sort the moves so that the best moves for the current player (indicated by the
+## [for_computer_player] argument) are first, and the worst moves are last.
+func get_sorted_moves(_for_computer_player : bool) -> Array[MMCAction]:
+	var ret_val : Array[MMCAction] = get_moves()
+	#TODO: Must return this list in sorted order
+	return ret_val
+
 func get_moves() -> Array[MMCAction]:
-	if player_1_hand.is_empty() or player_2_hand.is_empty():
+	if ai_hand.is_empty() or human_hand.is_empty():
 		return []
-	if player_1_turn:
-		return get_hand_moves(player_1_hand, player_1_last_played_a_card)
+	if ai_turn:
+		return get_hand_moves(ai_hand, ai_last_played_a_card)
 	else:
-		return get_hand_moves(player_2_hand, !player_1_last_played_a_card)
+		return get_hand_moves(human_hand, !ai_last_played_a_card)
 
 func get_hand_moves(hand : Array[int], can_restart : bool) -> Array[MMCAction]:
 	var ret_val : Array[MMCAction]

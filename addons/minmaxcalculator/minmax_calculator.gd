@@ -38,7 +38,7 @@ func _get_best_action_internal(game_state : MMCGameState, actorsLowerBound: MMCS
 		else:
 			return MMCResult.create_score_only(game_state.get_score().reversed())
 
-	var actions : Array[MMCAction] = game_state.get_sorted_moves()
+	var actions : Array[MMCAction] = game_state.get_sorted_moves(color > 0)
 	#actions.sort_custom(func(a : MMCAction, b : MMCAction) : return b.get_score().is_better_than(a.get_score()))
 	if actions.is_empty():
 		if color > 0:
