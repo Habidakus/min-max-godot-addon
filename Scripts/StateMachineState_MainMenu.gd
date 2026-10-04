@@ -8,3 +8,6 @@ func _on_dalmudi_button_up() -> void:
 
 func _on_checkers_button_up() -> void:
 	our_state_machine.switch_state("State_Checkers")
+
+func _on_nth_element_button_up() -> void:
+	our_state_machine.switch_state("State_NthElement")

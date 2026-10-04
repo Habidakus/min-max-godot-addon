@@ -1,16 +1,17 @@
-[gd_scene load_steps=14 format=3 uid="uid://cldr66blmcand"]
+[gd_scene format=3 uid="uid://cldr66blmcand"]
 
-[ext_resource type="Script" path="res://addons/statemachine/StateMachine.gd" id="2_nwsmv"]
-[ext_resource type="Script" path="res://Scripts/StateMachineState_MainMenu.gd" id="3_4tnxt"]
-[ext_resource type="Script" path="res://addons/statemachine/StateMachineState_AnyKeyToContinue.gd" id="3_ubbcg"]
-[ext_resource type="Script" path="res://Scripts/StateMachineState_TicTacToe.gd" id="4_f33cd"]
-[ext_resource type="Script" path="res://Scripts/StateMachineState_Dalmudi.gd" id="5_2jydx"]
-[ext_resource type="Script" path="res://Scripts/StateMachineState_Checkers.gd" id="6_wy7ar"]
-[ext_resource type="Script" path="res://addons/statemachine/StateMachineState.gd" id="7_32ngo"]
-[ext_resource type="Script" path="res://Scripts/CheckersState_HumanTurn.gd" id="8_t1pr0"]
-[ext_resource type="Script" path="res://Scripts/CheckersState_ComputerTurn.gd" id="9_igjcb"]
-[ext_resource type="Script" path="res://Scripts/Checkers_PiecesMoving.gd" id="10_rs8i3"]
-[ext_resource type="Script" path="res://Scripts/CheckersState_HumanHandOnPiece.gd" id="11_kjm2v"]
+[ext_resource type="Script" uid="uid://da4jmxbeqpsyh" path="res://addons/statemachine/StateMachine.gd" id="2_nwsmv"]
+[ext_resource type="Script" uid="uid://b7vwk8gcdggge" path="res://Scripts/StateMachineState_MainMenu.gd" id="3_4tnxt"]
+[ext_resource type="Script" uid="uid://cmo4rd026j7ny" path="res://addons/statemachine/StateMachineState_AnyKeyToContinue.gd" id="3_ubbcg"]
+[ext_resource type="Script" uid="uid://wycl8gy6ibra" path="res://Scripts/StateMachineState_TicTacToe.gd" id="4_f33cd"]
+[ext_resource type="Script" uid="uid://5y2wbjf8tqbs" path="res://Scripts/StateMachineState_Dalmudi.gd" id="5_2jydx"]
+[ext_resource type="Script" uid="uid://c7njcsp2c3bwx" path="res://Scripts/StateMachineState_Checkers.gd" id="6_wy7ar"]
+[ext_resource type="Script" uid="uid://cfwv1w01lwr2y" path="res://addons/statemachine/StateMachineState.gd" id="7_32ngo"]
+[ext_resource type="Script" uid="uid://b8ydnjls26arn" path="res://Scripts/CheckersState_HumanTurn.gd" id="8_t1pr0"]
+[ext_resource type="Script" uid="uid://dp85gvvier61u" path="res://Scripts/CheckersState_ComputerTurn.gd" id="9_igjcb"]
+[ext_resource type="Script" uid="uid://n34qqwgk8t4s" path="res://Scripts/Checkers_PiecesMoving.gd" id="10_rs8i3"]
+[ext_resource type="Script" uid="uid://dxc63mjh7g4x8" path="res://Scripts/CheckersState_HumanHandOnPiece.gd" id="11_kjm2v"]
+[ext_resource type="Script" uid="uid://15k23u2xwac4" path="res://Scripts/StateMachineState_NthElement.gd" id="12_6iyac"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_2xha2"]
 font_size = 204
@@ -22,17 +23,19 @@ font_size = 128
 outline_size = 12
 outline_color = Color(0.0605303, 0.0605303, 0.0605303, 1)
 
-[node name="Main" type="Control"]
+[node name="Main" type="Control" unique_id=1783800698]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+[node name="StateMachine" type="Node" parent="." unique_id=768229422 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("2_nwsmv")
 initial_state = NodePath("State_SplashPage")
 
-[node name="State_SplashPage" type="Control" parent="StateMachine" node_paths=PackedStringArray("next_state")]
+[node name="State_SplashPage" type="Control" parent="StateMachine" unique_id=1214573406 node_paths=PackedStringArray("next_state")]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -45,7 +48,7 @@ next_state = NodePath("../State_Menu")
 fade_in = true
 fade_out = true
 
-[node name="ColorRect" type="ColorRect" parent="StateMachine/State_SplashPage"]
+[node name="ColorRect" type="ColorRect" parent="StateMachine/State_SplashPage" unique_id=1711895265]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -54,7 +57,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.393086, 0.393086, 0.393085, 1)
 
-[node name="Label" type="Label" parent="StateMachine/State_SplashPage"]
+[node name="Label" type="Label" parent="StateMachine/State_SplashPage" unique_id=998870931]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -70,7 +73,7 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 64
 text = "Min Max Test Suite"
 
-[node name="Label2" type="Label" parent="StateMachine/State_SplashPage"]
+[node name="Label2" type="Label" parent="StateMachine/State_SplashPage" unique_id=1640637026]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -84,7 +87,7 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "(press any key to continue)"
 
-[node name="State_Menu" type="Control" parent="StateMachine"]
+[node name="State_Menu" type="Control" parent="StateMachine" unique_id=1158740988]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -94,7 +97,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_4tnxt")
 
-[node name="ColorRect" type="ColorRect" parent="StateMachine/State_Menu"]
+[node name="ColorRect" type="ColorRect" parent="StateMachine/State_Menu" unique_id=268874596]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -103,7 +106,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.393086, 0.393086, 0.393085, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="StateMachine/State_Menu"]
+[node name="VBoxContainer" type="VBoxContainer" parent="StateMachine/State_Menu" unique_id=1925559383]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -118,26 +121,30 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
 
-[node name="TicTacToe" type="Button" parent="StateMachine/State_Menu/VBoxContainer"]
+[node name="TicTacToe" type="Button" parent="StateMachine/State_Menu/VBoxContainer" unique_id=125375117]
 layout_mode = 2
 text = "Tic Tac Toe
 "
 
-[node name="Dalmudi" type="Button" parent="StateMachine/State_Menu/VBoxContainer"]
+[node name="Dalmudi" type="Button" parent="StateMachine/State_Menu/VBoxContainer" unique_id=325660229]
 layout_mode = 2
 text = "2 Player Dalmudi
 "
 
-[node name="Checkers" type="Button" parent="StateMachine/State_Menu/VBoxContainer"]
+[node name="Checkers" type="Button" parent="StateMachine/State_Menu/VBoxContainer" unique_id=836823807]
 layout_mode = 2
 text = "Checkers"
 
-[node name="LinkButton" type="LinkButton" parent="StateMachine/State_Menu/VBoxContainer"]
+[node name="NthElement" type="Button" parent="StateMachine/State_Menu/VBoxContainer" unique_id=570514091]
+layout_mode = 2
+text = "NthElement"
+
+[node name="LinkButton" type="LinkButton" parent="StateMachine/State_Menu/VBoxContainer" unique_id=1734559484]
 layout_mode = 2
 text = "Addon Source Code"
 uri = "https://github.com/Habidakus/min-max-godot-addon"
 
-[node name="State_TicTacToe" type="Control" parent="StateMachine"]
+[node name="State_TicTacToe" type="Control" parent="StateMachine" unique_id=110478979]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -147,7 +154,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_f33cd")
 
-[node name="ColorRect" type="ColorRect" parent="StateMachine/State_TicTacToe"]
+[node name="ColorRect" type="ColorRect" parent="StateMachine/State_TicTacToe" unique_id=111091019]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -156,7 +163,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.393086, 0.393086, 0.393085, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="StateMachine/State_TicTacToe"]
+[node name="MarginContainer" type="MarginContainer" parent="StateMachine/State_TicTacToe" unique_id=2016023447]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -168,17 +175,17 @@ theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 30
 
-[node name="GridContainer" type="GridContainer" parent="StateMachine/State_TicTacToe/MarginContainer"]
+[node name="GridContainer" type="GridContainer" parent="StateMachine/State_TicTacToe/MarginContainer" unique_id=2005697080]
 layout_mode = 2
 columns = 3
 
-[node name="11" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer"]
+[node name="11" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer" unique_id=847613383]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/11"]
+[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/11" unique_id=1349660548]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -190,13 +197,13 @@ text = "X"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="12" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer"]
+[node name="12" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer" unique_id=1295513051]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/12"]
+[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/12" unique_id=1784751141]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -208,13 +215,13 @@ text = "X"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="13" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer"]
+[node name="13" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer" unique_id=772644161]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/13"]
+[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/13" unique_id=208781342]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -226,13 +233,13 @@ text = "X"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="21" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer"]
+[node name="21" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer" unique_id=1648225737]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/21"]
+[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/21" unique_id=480878512]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -244,13 +251,13 @@ text = "X"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="22" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer"]
+[node name="22" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer" unique_id=150490049]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/22"]
+[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/22" unique_id=2135842339]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -262,13 +269,13 @@ text = "X"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="23" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer"]
+[node name="23" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer" unique_id=443059613]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/23"]
+[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/23" unique_id=1032916587]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -280,13 +287,13 @@ text = "X"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="31" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer"]
+[node name="31" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer" unique_id=899505997]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/31"]
+[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/31" unique_id=1440177581]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -298,13 +305,13 @@ text = "X"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="32" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer"]
+[node name="32" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer" unique_id=456599397]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/32"]
+[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/32" unique_id=779158663]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -316,13 +323,13 @@ text = "X"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="33" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer"]
+[node name="33" type="ColorRect" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer" unique_id=29908724]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/33"]
+[node name="Label" type="Label" parent="StateMachine/State_TicTacToe/MarginContainer/GridContainer/33" unique_id=234512214]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -334,7 +341,7 @@ text = "X"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Continue" type="Label" parent="StateMachine/State_TicTacToe"]
+[node name="Continue" type="Label" parent="StateMachine/State_TicTacToe" unique_id=1463450795]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -348,7 +355,8 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "(Press any key to continue)"
 
-[node name="State_Dalmudi" type="Control" parent="StateMachine"]
+[node name="State_Dalmudi" type="Control" parent="StateMachine" unique_id=1256564365]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -357,7 +365,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("5_2jydx")
 
-[node name="ColorRect" type="ColorRect" parent="StateMachine/State_Dalmudi"]
+[node name="ColorRect" type="ColorRect" parent="StateMachine/State_Dalmudi" unique_id=1428353791]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -366,7 +374,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.393086, 0.393086, 0.393085, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="StateMachine/State_Dalmudi/ColorRect"]
+[node name="MarginContainer" type="MarginContainer" parent="StateMachine/State_Dalmudi/ColorRect" unique_id=2034040264]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -378,32 +386,32 @@ theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 30
 
-[node name="VBoxContainer" type="VBoxContainer" parent="StateMachine/State_Dalmudi/ColorRect/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="StateMachine/State_Dalmudi/ColorRect/MarginContainer" unique_id=1770508688]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 90
 
-[node name="Hand_AI" type="ColorRect" parent="StateMachine/State_Dalmudi/ColorRect/MarginContainer/VBoxContainer"]
+[node name="Hand_AI" type="ColorRect" parent="StateMachine/State_Dalmudi/ColorRect/MarginContainer/VBoxContainer" unique_id=537008883]
 custom_minimum_size = Vector2(1092, 110)
 layout_mode = 2
 size_flags_vertical = 3
 color = Color(4.76494e-06, 0.526513, 0.0255639, 1)
 
-[node name="Discard_Area" type="ColorRect" parent="StateMachine/State_Dalmudi/ColorRect/MarginContainer/VBoxContainer"]
+[node name="Discard_Area" type="ColorRect" parent="StateMachine/State_Dalmudi/ColorRect/MarginContainer/VBoxContainer" unique_id=1315587405]
 custom_minimum_size = Vector2(544, 110)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 color = Color(0.388793, 0, 0.0507862, 1)
 
-[node name="Hand_Player" type="ColorRect" parent="StateMachine/State_Dalmudi/ColorRect/MarginContainer/VBoxContainer"]
+[node name="Hand_Player" type="ColorRect" parent="StateMachine/State_Dalmudi/ColorRect/MarginContainer/VBoxContainer" unique_id=1504657733]
 custom_minimum_size = Vector2(1092, 110)
 layout_mode = 2
 size_flags_vertical = 3
 color = Color(4.76494e-06, 0.526513, 0.0255639, 1)
 
-[node name="PassButton" type="Button" parent="StateMachine/State_Dalmudi/ColorRect"]
+[node name="PassButton" type="Button" parent="StateMachine/State_Dalmudi/ColorRect" unique_id=670923887]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
 anchors_preset = 7
@@ -419,7 +427,7 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "No Valid Moves - PASS"
 
-[node name="Continue" type="Label" parent="StateMachine/State_Dalmudi"]
+[node name="Continue" type="Label" parent="StateMachine/State_Dalmudi" unique_id=729913650]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -433,7 +441,7 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "(Press any key to continue)"
 
-[node name="GameOver" type="Label" parent="StateMachine/State_Dalmudi"]
+[node name="GameOver" type="Label" parent="StateMachine/State_Dalmudi" unique_id=1226513212]
 top_level = true
 layout_mode = 1
 anchors_preset = 8
@@ -452,7 +460,7 @@ text = "VICTORY"
 label_settings = SubResource("LabelSettings_2xha2")
 horizontal_alignment = 1
 
-[node name="State_Checkers" type="Control" parent="StateMachine"]
+[node name="State_Checkers" type="Control" parent="StateMachine" unique_id=11122440]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -462,7 +470,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("6_wy7ar")
 
-[node name="ColorRect" type="ColorRect" parent="StateMachine/State_Checkers"]
+[node name="ColorRect" type="ColorRect" parent="StateMachine/State_Checkers" unique_id=242594421]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -471,7 +479,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.393086, 0.393086, 0.393085, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="StateMachine/State_Checkers/ColorRect"]
+[node name="MarginContainer" type="MarginContainer" parent="StateMachine/State_Checkers/ColorRect" unique_id=640255937]
 custom_minimum_size = Vector2(648, 648)
 layout_mode = 1
 anchors_preset = 8
@@ -490,11 +498,11 @@ theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 30
 
-[node name="GridContainer" type="GridContainer" parent="StateMachine/State_Checkers/ColorRect/MarginContainer"]
+[node name="GridContainer" type="GridContainer" parent="StateMachine/State_Checkers/ColorRect/MarginContainer" unique_id=507617752]
 layout_mode = 2
 columns = 8
 
-[node name="PassButton" type="Button" parent="StateMachine/State_Checkers/ColorRect"]
+[node name="PassButton" type="Button" parent="StateMachine/State_Checkers/ColorRect" unique_id=173543792]
 visible = false
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
@@ -511,7 +519,7 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "No Valid Moves - PASS"
 
-[node name="Continue" type="Label" parent="StateMachine/State_Checkers/ColorRect"]
+[node name="Continue" type="Label" parent="StateMachine/State_Checkers/ColorRect" unique_id=501638703]
 visible = false
 layout_mode = 1
 anchors_preset = 7
@@ -526,16 +534,16 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "(Press any key to continue)"
 
-[node name="CheckersStateMachine" type="Node" parent="StateMachine/State_Checkers" node_paths=PackedStringArray("initial_state")]
+[node name="CheckersStateMachine" type="Node" parent="StateMachine/State_Checkers" unique_id=995002254 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("2_nwsmv")
 initial_state = NodePath("State_Init")
 
-[node name="State_Init" type="Control" parent="StateMachine/State_Checkers/CheckersStateMachine"]
+[node name="State_Init" type="Control" parent="StateMachine/State_Checkers/CheckersStateMachine" unique_id=268886047]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("7_32ngo")
 
-[node name="State_GameOver" type="Control" parent="StateMachine/State_Checkers/CheckersStateMachine" node_paths=PackedStringArray("next_state")]
+[node name="State_GameOver" type="Control" parent="StateMachine/State_Checkers/CheckersStateMachine" unique_id=1947883779 node_paths=PackedStringArray("next_state")]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -546,7 +554,7 @@ grow_vertical = 2
 script = ExtResource("3_ubbcg")
 next_state = NodePath("../State_Init")
 
-[node name="Label" type="Label" parent="StateMachine/State_Checkers/CheckersStateMachine/State_GameOver"]
+[node name="Label" type="Label" parent="StateMachine/State_Checkers/CheckersStateMachine/State_GameOver" unique_id=1654240232]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -563,7 +571,7 @@ theme_override_font_sizes/font_size = 128
 text = "GAME OVER"
 label_settings = SubResource("LabelSettings_7qh42")
 
-[node name="Label2" type="Label" parent="StateMachine/State_Checkers/CheckersStateMachine/State_GameOver"]
+[node name="Label2" type="Label" parent="StateMachine/State_Checkers/CheckersStateMachine/State_GameOver" unique_id=693435850]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -578,32 +586,85 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "(press any key to continue)"
 
-[node name="State_HumanTurn" type="Control" parent="StateMachine/State_Checkers/CheckersStateMachine"]
+[node name="State_HumanTurn" type="Control" parent="StateMachine/State_Checkers/CheckersStateMachine" unique_id=579077187]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("8_t1pr0")
 
-[node name="State_ComputerTurn" type="Control" parent="StateMachine/State_Checkers/CheckersStateMachine"]
+[node name="State_ComputerTurn" type="Control" parent="StateMachine/State_Checkers/CheckersStateMachine" unique_id=430222941]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("9_igjcb")
 
-[node name="State_PiecesMoving" type="Control" parent="StateMachine/State_Checkers/CheckersStateMachine"]
+[node name="State_PiecesMoving" type="Control" parent="StateMachine/State_Checkers/CheckersStateMachine" unique_id=922383224]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("10_rs8i3")
 
-[node name="State_HumanHandOnPiece" type="Control" parent="StateMachine/State_Checkers/CheckersStateMachine"]
+[node name="State_HumanHandOnPiece" type="Control" parent="StateMachine/State_Checkers/CheckersStateMachine" unique_id=978894591]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("11_kjm2v")
 
+[node name="State_NthElement" type="Control" parent="StateMachine" unique_id=1194604604 node_paths=PackedStringArray("next_state")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("12_6iyac")
+next_state = NodePath("../State_Menu")
+metadata/_custom_type_script = "uid://cmo4rd026j7ny"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="StateMachine/State_NthElement" unique_id=1688372279]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SourceList" type="VBoxContainer" parent="StateMachine/State_NthElement/HBoxContainer" unique_id=557796174]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ElementsSelector" type="OptionButton" parent="StateMachine/State_NthElement/HBoxContainer" unique_id=587318821]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+selected = 3
+item_count = 5
+popup/item_0/text = "1"
+popup/item_0/id = 1
+popup/item_1/text = "3"
+popup/item_1/id = 3
+popup/item_2/text = "5"
+popup/item_2/id = 5
+popup/item_3/text = "7"
+popup/item_3/id = 7
+popup/item_4/text = "9"
+popup/item_4/id = 9
+
+[node name="Alphabetical" type="VBoxContainer" parent="StateMachine/State_NthElement/HBoxContainer" unique_id=269379534]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="WordLength" type="VBoxContainer" parent="StateMachine/State_NthElement/HBoxContainer" unique_id=2136736064]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
 [connection signal="button_up" from="StateMachine/State_Menu/VBoxContainer/TicTacToe" to="StateMachine/State_Menu" method="_on_tic_tac_toe_button_up"]
 [connection signal="button_up" from="StateMachine/State_Menu/VBoxContainer/Dalmudi" to="StateMachine/State_Menu" method="_on_dalmudi_button_up"]
 [connection signal="button_up" from="StateMachine/State_Menu/VBoxContainer/Checkers" to="StateMachine/State_Menu" method="_on_checkers_button_up"]
+[connection signal="button_up" from="StateMachine/State_Menu/VBoxContainer/NthElement" to="StateMachine/State_Menu" method="_on_nth_element_button_up"]
 [connection signal="button_up" from="StateMachine/State_Dalmudi/ColorRect/PassButton" to="StateMachine/State_Dalmudi" method="_on_pass_turn_button_up"]
 [connection signal="button_up" from="StateMachine/State_Checkers/ColorRect/PassButton" to="StateMachine/State_Dalmudi" method="_on_pass_turn_button_up"]
+[connection signal="item_selected" from="StateMachine/State_NthElement/HBoxContainer/ElementsSelector" to="StateMachine/State_NthElement" method="_on_elements_selector_item_selected"]
